@@ -161,6 +161,14 @@ code, pre, .mono {
   border-color: rgba(var(--accent-a),0.65);
   box-shadow: 0 10px 24px rgba(var(--accent-a),0.20);
 }
+.btn--outline {
+  background: transparent;
+  border-color: rgba(255,255,255,0.20);
+}
+.btn--outline:hover {
+  border-color: rgba(255,255,255,0.40);
+  background: rgba(255,255,255,0.06);
+}
 .btn--ghost {
   background: transparent;
   border-color: rgba(255,255,255,0.14);
@@ -1050,6 +1058,54 @@ details.tech-details[open] summary::before { content: '▾ '; }
 }
 .info-card__text p { margin-bottom: 8px; }
 
+/* ── Stats Grid ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.stats-grid--wide {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.stat-card {
+  background: linear-gradient(160deg, rgba(255,255,255,0.07), rgba(0,0,0,0.40));
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+.stat-card--accent {
+  border-color: rgba(255,107,107,0.30);
+  background: linear-gradient(160deg, rgba(255,107,107,0.08), rgba(0,0,0,0.40));
+}
+.stat-card--large {
+  padding: 20px;
+}
+
+.stat-card__value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 4px;
+}
+.stat-card--large .stat-card__value {
+  font-size: 1.35rem;
+}
+.stat-card--accent .stat-card__value {
+  color: var(--error);
+}
+
+.stat-card__label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.45;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
 /* ── Case Study Specifics ── */
 .article-section { margin-bottom: 28px; }
 .article-section h2 {
@@ -1088,6 +1144,14 @@ details.tech-details[open] summary::before { content: '▾ '; }
   padding: 14px;
   margin-bottom: 16px;
   overflow-x: auto;
+}
+.evidence-block__title {
+  font-size: 0.70rem;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  opacity: 0.50;
+  font-weight: 600;
+  margin-bottom: 10px;
 }
 .evidence-block pre {
   font-size: 0.72rem;
@@ -1351,6 +1415,13 @@ details.tech-details[open] summary::before { content: '▾ '; }
   .amount-input { font-size: 1.3rem; }
   .option-row { flex-direction: column; gap: 12px; }
   .token-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
+  .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stats-grid--wide { grid-template-columns: 1fr 1fr; }
+  .stat-card { padding: 12px; }
+  .stat-card__value { font-size: 1rem; }
+  .stat-card--large .stat-card__value { font-size: 1.1rem; }
+  .comparison-table { font-size: 0.72rem; }
+  .comparison-table th, .comparison-table td { padding: 8px 8px; }
   .privacy-grid { grid-template-columns: 1fr; }
   .metadata-row { flex-direction: column; gap: 4px; }
   .metadata-row__value { text-align: left; max-width: 100%; }
