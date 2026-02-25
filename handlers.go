@@ -651,6 +651,7 @@ type CombinedStats struct {
 type CaseStudyPageData struct {
 	PageData
 	Eagle    ResellerStats
+	Lizard   ResellerStats
 	SwapMy   ResellerStats
 	Combined CombinedStats
 }
@@ -660,8 +661,9 @@ var caseStudyData CaseStudyPageData
 
 // rawAnalysis is the structure matching the JSON file.
 type rawAnalysis struct {
-	EagleSwap rawReseller `json:"EagleSwap"`
-	SwapMy    rawReseller `json:"SwapMy"`
+	EagleSwap  rawReseller `json:"EagleSwap"`
+	LizardSwap rawReseller `json:"LizardSwap"`
+	SwapMy     rawReseller `json:"SwapMy"`
 }
 
 type rawReseller struct {
@@ -696,12 +698,13 @@ func initCaseStudy() {
 	}
 
 	caseStudyData.Eagle = formatResellerStats(raw.EagleSwap)
+	caseStudyData.Lizard = formatResellerStats(raw.LizardSwap)
 	caseStudyData.SwapMy = formatResellerStats(raw.SwapMy)
 	caseStudyData.Combined = CombinedStats{
-		TotalVolume:  formatUSD(raw.EagleSwap.TotalVolumeUSD + raw.SwapMy.TotalVolumeUSD),
-		TotalRevenue: formatUSD(raw.EagleSwap.TotalRevenueUSD + raw.SwapMy.TotalRevenueUSD),
-		TotalSwaps:   formatCommas(int64(raw.EagleSwap.TotalSwaps + raw.SwapMy.TotalSwaps)),
-		UniqueUsers:  formatCommas(int64(raw.EagleSwap.UniqueSenders + raw.SwapMy.UniqueSenders)),
+		TotalVolume:  formatUSD(raw.EagleSwap.TotalVolumeUSD + raw.LizardSwap.TotalVolumeUSD + raw.SwapMy.TotalVolumeUSD),
+		TotalRevenue: formatUSD(raw.EagleSwap.TotalRevenueUSD + raw.LizardSwap.TotalRevenueUSD + raw.SwapMy.TotalRevenueUSD),
+		TotalSwaps:   formatCommas(int64(raw.EagleSwap.TotalSwaps + raw.LizardSwap.TotalSwaps + raw.SwapMy.TotalSwaps)),
+		UniqueUsers:  formatCommas(int64(raw.EagleSwap.UniqueSenders + raw.LizardSwap.UniqueSenders + raw.SwapMy.UniqueSenders)),
 	}
 }
 
@@ -710,6 +713,7 @@ func handleCaseStudy(w http.ResponseWriter, r *http.Request) {
 	data := CaseStudyPageData{
 		PageData: newPageData("The Crypto Swap Reseller Problem"),
 		Eagle:    caseStudyData.Eagle,
+		Lizard:   caseStudyData.Lizard,
 		SwapMy:   caseStudyData.SwapMy,
 		Combined: caseStudyData.Combined,
 	}

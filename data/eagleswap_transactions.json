@@ -1,5 +1,1172 @@
 [
   {
+    "originAsset": "nep245:v2_1.omni.hot.tg:56_2CMMyVTGZkeyNZTSvS5sarzfir6g",
+    "destinationAsset": "nep141:eth-0xdac17f958d2ee523a2206206994597c13d831ec7.omft.near",
+    "depositAddress": "0x077C3c14b656dB3F307b39450E2575EC9C13f4B7",
+    "depositMemo": null,
+    "depositAddressAndMemo": "0x077C3c14b656dB3F307b39450E2575EC9C13f4B7",
+    "recipient": "0x75212e00136eead175477f74f5259861b9db4045",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T14:54:09.825Z",
+    "createdAtTimestamp": 1772031249,
+    "intentHashes": "EwYzftPrWBB5EqrTh5LKdeNXt3yfzN8BsZWrN8VfRCZm",
+    "referral": null,
+    "amountInFormatted": "36.5",
+    "amountOutFormatted": "36.090426",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "GtgJZKMob3vLScK25EFnoNwwbVKsbr1wQYERrqUxug2d",
+      "Zq6pxcC8z9JRGdgqvaS8gEdgmW8KpPrwn2G22eGWkqx"
+    ],
+    "originChainTxHashes": [
+      "0xf3d4c29f7d6c2eb913170a62783dd459874635a494489cb0f5ebdbfbc9acf64b",
+      "0x1bc968c4c6d3f9225bee3001a816cd73477773233ff0da5ec6c384f886734260"
+    ],
+    "destinationChainTxHashes": [
+      "0xae9a0fe2d16f305dcb34394f1e633e3390c686f19bb318706e42244e13543767"
+    ],
+    "amountIn": "36500000000000000000",
+    "amountInUsd": "36.5000",
+    "amountOut": "36090426",
+    "amountOutUsd": "36.0904",
+    "refundTo": "0x376bea6883c3f839a82ede3ba4a0cd108ab6443c",
+    "senders": [
+      "0xEF3aeFf9A5F61C6Dda33069c58C1434006e13B20"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:ltc.omft.near",
+    "destinationAsset": "nep141:eth-0xdac17f958d2ee523a2206206994597c13d831ec7.omft.near",
+    "depositAddress": "LcahGMWTFDct3ySCW2dTTrPRezLyLbTRsA",
+    "depositMemo": null,
+    "depositAddressAndMemo": "LcahGMWTFDct3ySCW2dTTrPRezLyLbTRsA",
+    "recipient": "0x221e468E8361763478D8ECCEEEB0b34C7486D093",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T14:44:14.992Z",
+    "createdAtTimestamp": 1772030654,
+    "intentHashes": "2Q626oKihGdEjBuaB9Nb4TeRehZrCvREgfrUPGComZhY",
+    "referral": null,
+    "amountInFormatted": "20.34",
+    "amountOutFormatted": "1154.008157",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "C5ZXFVR5buRHMXGwywdwuF26dYEVRUoXugSv6KFs6QyA",
+      "8KqLyQCyZffVVCF3AYvpbG4n9TpGwM7yKwXmZpFWcr1s"
+    ],
+    "originChainTxHashes": [
+      "8e093bf02b7740b8f630afbef1f4a775b2eaeadebf72f3a34285aa506d86461e"
+    ],
+    "destinationChainTxHashes": [
+      "0xc5c7fc11526cbfe16cbeb91018f749420bad3915875492c1d6c65f668932d670"
+    ],
+    "amountIn": "2034000000",
+    "amountInUsd": "1143.1080",
+    "amountOut": "1140428062",
+    "amountOutUsd": "1140.3824",
+    "refundTo": "ltc1q98thus2jw39fh5ydnpr2wv8r8kkcu9fczmdvqc",
+    "senders": [],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:sol.omft.near",
+    "destinationAsset": "nep141:sol-c800a4bd850783ccb82c2b2c7e84175443606352.omft.near",
+    "depositAddress": "CH9UU6cfB5NYnSRyv78fnUEsGCJdiF78hFSLQgFCHeEV",
+    "depositMemo": null,
+    "depositAddressAndMemo": "CH9UU6cfB5NYnSRyv78fnUEsGCJdiF78hFSLQgFCHeEV",
+    "recipient": "ArrqA45n9ysEQ1VgSEpwTdCvfERjGd4Wy7oDd7PoCjQP",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T14:43:10.116Z",
+    "createdAtTimestamp": 1772030590,
+    "intentHashes": "87vgL91uToHD8mwpydfadzjzd6Bs31xJZ1smr5m9T4mo",
+    "referral": null,
+    "amountInFormatted": "62.8",
+    "amountOutFormatted": "5280.479382",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "6HPMea4P41ZBGFNaNgQmxpaYeR3vCSiNpqLWhZrKufr4",
+      "2bVycJbSmJGAuKXigxFAe7Mub8RQQaHTfxg54Hzct8sh"
+    ],
+    "originChainTxHashes": [
+      "5G8FVjvWXpLrbogpYkDhjfBVuimS3LyXxoZB6Cjcxiobu7Wx2Arz9j773uPPAq8zJex124TiuNJRTiisix8ab9Ne"
+    ],
+    "destinationChainTxHashes": [
+      "5eiiqVR4ujB4bZeLwZw74fyRinFDJyp6cLjBQeXqZMewTBSW9bHmFny2mH6gXXRSdiFZ3XWsCqGmaPDY9ByeQ1WL"
+    ],
+    "amountIn": "62800000000",
+    "amountInUsd": "5289.6440",
+    "amountOut": "5272343967",
+    "amountOutUsd": "5272.1331",
+    "refundTo": "BHWKrt4ooe1n7eXt23j65QMioCKWASNAPqBh3cHj2GS5",
+    "senders": [
+      "BHWKrt4ooe1n7eXt23j65QMioCKWASNAPqBh3cHj2GS5"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:sol.omft.near",
+    "destinationAsset": "nep141:sol-c800a4bd850783ccb82c2b2c7e84175443606352.omft.near",
+    "depositAddress": "46KqA1yoW8SfWhoYqGMDVnSmzu39kpDnL1ZwA6xkzLdK",
+    "depositMemo": null,
+    "depositAddressAndMemo": "46KqA1yoW8SfWhoYqGMDVnSmzu39kpDnL1ZwA6xkzLdK",
+    "recipient": "ArrqA45n9ysEQ1VgSEpwTdCvfERjGd4Wy7oDd7PoCjQP",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T14:37:42.060Z",
+    "createdAtTimestamp": 1772030262,
+    "intentHashes": "5yjPJ8hxKcbN1nMyfnSQFev97hR4pJC9yhje93mJ66qT",
+    "referral": null,
+    "amountInFormatted": "1.0",
+    "amountOutFormatted": "83.765559",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "H4YH6wmjonarf3R7UTim8LoKnrsnmepVnHBqWKJFgyhJ",
+      "AViJGWGUhwajmrWaypKA2eqdM3fYVzFmFnn9LtpXGR66"
+    ],
+    "originChainTxHashes": [
+      "5BAsgYZR3YdoeriZk1uxuih8J2CCv1YGvndLwEaeQjLddWt1de117gVmvtN8aNdHEMQ9bpHcbUqBBm53iS8jExGS"
+    ],
+    "destinationChainTxHashes": [
+      "5gfRuV2z8qsuANvHPnfKBmruqtAHVTcT1z6UVyt9gurekByfRFAgDriniRRFuTyCpwd65FJgnr3zxJ9TZHW91gyw"
+    ],
+    "amountIn": "1000000000",
+    "amountInUsd": "84.3500",
+    "amountOut": "83755594",
+    "amountOutUsd": "83.7556",
+    "refundTo": "BHWKrt4ooe1n7eXt23j65QMioCKWASNAPqBh3cHj2GS5",
+    "senders": [
+      "BHWKrt4ooe1n7eXt23j65QMioCKWASNAPqBh3cHj2GS5"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:sol-5ce3bf3a31af18be40ba30f721101b4341690186.omft.near",
+    "destinationAsset": "nep141:sol-c800a4bd850783ccb82c2b2c7e84175443606352.omft.near",
+    "depositAddress": "8TmbTYice3ZZZgWh1eKgyPCpyhSzCVVzkodeimSQCaSi",
+    "depositMemo": null,
+    "depositAddressAndMemo": "8TmbTYice3ZZZgWh1eKgyPCpyhSzCVVzkodeimSQCaSi",
+    "recipient": "3GtgSSLiKAxFmPjTBRCDduUVxeJt2tPxr6w26Lt4x6Qx",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T14:32:33.853Z",
+    "createdAtTimestamp": 1772029953,
+    "intentHashes": "3UKU7VtbVMC9pLy3WppA7xMVn3kxspj49zy2tHkMAGxN",
+    "referral": null,
+    "amountInFormatted": "1250.75",
+    "amountOutFormatted": "1250.589921",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 0
+      }
+    ],
+    "nearTxHashes": [
+      "ETEbFisLY39zFgfABBiFu6iUJxEWYtnTqdZPYD6Fxn66",
+      "CArsCY9hc4LHB52haXFtvtE6K8PTYqkgiponXmABzq5s"
+    ],
+    "originChainTxHashes": [
+      "4hnVcAbMWetrLeFEnymz6t4D93bhrsqVj4riVkAzpHQKYM7CZtj4zXVEjeWqxJW8TesmBuiF49AbpZfUuemrefqt"
+    ],
+    "destinationChainTxHashes": [
+      "47Ap9D1hwarFSGkobpAG8h19nqwGUWhogYU6rhzcbepwhGmsQeepBmKRCsz99tNN1qVWG18FRkuYEzENmu4ZZVrX"
+    ],
+    "amountIn": "1250750000",
+    "amountInUsd": "1250.6249",
+    "amountOut": "1250589921",
+    "amountOutUsd": "1250.5899",
+    "refundTo": "4ixycRdH97uSXafZDVJQwtsJPQUZiiLpteMxEKjtKaPz",
+    "senders": [
+      "4ixycRdH97uSXafZDVJQwtsJPQUZiiLpteMxEKjtKaPz"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:tron.omft.near",
+    "destinationAsset": "nep245:v2_1.omni.hot.tg:56_2CMMyVTGZkeyNZTSvS5sarzfir6g",
+    "depositAddress": "TXdx5ysYEE8FLmbJpBGCMzZTKkCHNFeDC1",
+    "depositMemo": null,
+    "depositAddressAndMemo": "TXdx5ysYEE8FLmbJpBGCMzZTKkCHNFeDC1",
+    "recipient": "0x1587b56e64Bb304391AEce2Ebf107aC4C5521b8E",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T14:10:43.039Z",
+    "createdAtTimestamp": 1772028643,
+    "intentHashes": "GPqLhh4RQCtEfLUWKR3dKTBzdkKBUos3uRSUNj4MncxG",
+    "referral": null,
+    "amountInFormatted": "2652.0",
+    "amountOutFormatted": "757.287294695959992005",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 0
+      }
+    ],
+    "nearTxHashes": [
+      "FiiC3BEYk4sczrcLdtKiq5pWjifEtVFdawuQ4JeqxigQ",
+      "9RXWP3YUdbZeJbjUoN6pEiF8eWYYrSF6QFfHk5Ve9MxM"
+    ],
+    "originChainTxHashes": [
+      "8573c5dfecaa2277876ad31a90595a5f74c03b090d2302d4f8b2fe6f8c79290b",
+      "c49f752dfedf42c49b402644df4b9b641c8b7ab303fe8471c21688f657fd12df"
+    ],
+    "destinationChainTxHashes": [
+      "0x39da14f64afda7908a9b9960c2b7671c90bc4a8b9ef862c754da15e0939c0de9"
+    ],
+    "amountIn": "2652000000",
+    "amountInUsd": "757.8594",
+    "amountOut": "757287290695955992001",
+    "amountOutUsd": "757.2873",
+    "refundTo": "TTyrQRaVwyV6LE8GCEEN7fRHYU9mHRucDv",
+    "senders": [
+      "TTyrQRaVwyV6LE8GCEEN7fRHYU9mHRucDv"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:sol.omft.near",
+    "destinationAsset": "nep245:v2_1.omni.hot.tg:1117_",
+    "depositAddress": "AKk1Gn45WQTujzYb2Q72YQNT2SESE6rp3YoLJxL2saQM",
+    "depositMemo": null,
+    "depositAddressAndMemo": "AKk1Gn45WQTujzYb2Q72YQNT2SESE6rp3YoLJxL2saQM",
+    "recipient": "UQB8DWhdxfmQy06BhdqGxVmf1nRY7NSqnSF7AOoUrHPpEwHF",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T13:50:05.329Z",
+    "createdAtTimestamp": 1772027405,
+    "intentHashes": "94f73Qub7auj8Gg2HRvsNEcq4DwvKX2RufDg3vG9E5Xv",
+    "referral": null,
+    "amountInFormatted": "5.0",
+    "amountOutFormatted": "321.046060008",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "F7nbREJb9hiPDnrdfhfYqUVcH4KieXqEh23zXFAHyEB2",
+      "5nkbpdcnsLojTMv1KfgEvmEuKMijwHxxjNmXEBzQRErY"
+    ],
+    "originChainTxHashes": [
+      "4gVj3MZfkJyT4fEBf5LAutkA2gMTGvRXErgEpi6ijdCHYdHmXvqEJGTo9pjrptNvD5Lno3HZrEUijTA6GLVm73Ku"
+    ],
+    "destinationChainTxHashes": [
+      "06938c5852a698720f8206332c29d3a770b08cda4f48fe241d6df0e71c6a6d62"
+    ],
+    "amountIn": "5000000000",
+    "amountInUsd": "420.4000",
+    "amountOut": "321867893848",
+    "amountOutUsd": "418.4283",
+    "refundTo": "686mpBwuXnyHSYzXaQjNjata88U7yMxR4L5r89qaTYeX",
+    "senders": [
+      "686mpBwuXnyHSYzXaQjNjata88U7yMxR4L5r89qaTYeX"
+    ],
+    "refundReason": "INTENT_SUBMIT_FAILED"
+  },
+  {
+    "originAsset": "nep141:sol.omft.near",
+    "destinationAsset": "nep245:v2_1.omni.hot.tg:1117_",
+    "depositAddress": "C8dqwXgUjP8Y28SJN3izozUkEVXy7YEZ24BnbYF1mz4k",
+    "depositMemo": null,
+    "depositAddressAndMemo": "C8dqwXgUjP8Y28SJN3izozUkEVXy7YEZ24BnbYF1mz4k",
+    "recipient": "UQB8DWhdxfmQy06BhdqGxVmf1nRY7NSqnSF7AOoUrHPpEwHF",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T13:45:14.664Z",
+    "createdAtTimestamp": 1772027114,
+    "intentHashes": "D9RUa2eUnKSKyGtUNvd1bRzNjX9HZoxsgCKCTgGQHc4N",
+    "referral": null,
+    "amountInFormatted": "1.27",
+    "amountOutFormatted": "81.581345684",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "9fmf9vTQcsZo5QNHm2ZMaK8TdXbeoMNTibuBy499tAzF",
+      "AuTajR8dnHnkCeGZ6USdiVf8eTcqDP5h8e6ZxNmsJofp"
+    ],
+    "originChainTxHashes": [
+      "3M8ZpgGm2SEZ1cZ7eL98QySY9yNKVJX1T9HiLZkTzHCK5iarDwQkKNquBBjbj6vHdKmH3jdt2TK5N2epFHtENTZh"
+    ],
+    "destinationChainTxHashes": [
+      "8f1a21f5f2625424702fe03bc8595588ae7f779d42dbd6fa63e733e1be4e3a04"
+    ],
+    "amountIn": "1270000000",
+    "amountInUsd": "106.6165",
+    "amountOut": "81561025237",
+    "amountOutUsd": "106.0293",
+    "refundTo": "FWFNQdj3c7rPdjmMV5TdB7UDdrMdKZzRq5uizvCmTiiR",
+    "senders": [
+      "FWFNQdj3c7rPdjmMV5TdB7UDdrMdKZzRq5uizvCmTiiR"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:eth-0xdac17f958d2ee523a2206206994597c13d831ec7.omft.near",
+    "destinationAsset": "nep141:eth-0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.omft.near",
+    "depositAddress": "0xac750620553F4bA335AaF216b0653f6CD541269d",
+    "depositMemo": null,
+    "depositAddressAndMemo": "0xac750620553F4bA335AaF216b0653f6CD541269d",
+    "recipient": "0x9D3D0dDF149d5116cbADD0461ef23aDc2463440A",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T13:07:02.357Z",
+    "createdAtTimestamp": 1772024822,
+    "intentHashes": "2zx7sT3ogy7hnpJKCLJpzvzieThmxUvh3DMuUvWyPEoj",
+    "referral": null,
+    "amountInFormatted": "300.0",
+    "amountOutFormatted": "298.769493",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "71St9FXgZ7ui6CbcdrLobreX2Z5UcWGDypUZmEWoMgKh",
+      "71YALx8thATK2fe6Xe7G8fALHBypB3pG3GF4evzFLFgD"
+    ],
+    "originChainTxHashes": [
+      "0x9f3765a38ce7c6a34eb32220f25446d070bc359fd2184037772e02b51364c6a7",
+      "0xe6b9aca0e11a195ef2878c477db25eab826b2333e4069b798a91ae6b52ed6700"
+    ],
+    "destinationChainTxHashes": [
+      "0x64768e796b8bd59e21d3c5e2c237004f7c3a57d9278e38fd3b73314ec45bb5b7"
+    ],
+    "amountIn": "300000000",
+    "amountInUsd": "299.9886",
+    "amountOut": "298769493",
+    "amountOutUsd": "298.7465",
+    "refundTo": "0xf96dda404ac6ec26c3dd7ec41d57b33f45c9ee90",
+    "senders": [
+      "0x974CaA59e49682CdA0AD2bbe82983419A2ECC400"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:eth.omft.near",
+    "destinationAsset": "nep245:v2_1.omni.hot.tg:56_2CMMyVTGZkeyNZTSvS5sarzfir6g",
+    "depositAddress": "0x3Adf0cA57577874Fd047bb5a4D78D7dFd741c794",
+    "depositMemo": null,
+    "depositAddressAndMemo": "0x3Adf0cA57577874Fd047bb5a4D78D7dFd741c794",
+    "recipient": "0x1587b56e64Bb304391AEce2Ebf107aC4C5521b8E",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T13:02:36.232Z",
+    "createdAtTimestamp": 1772024556,
+    "intentHashes": "pr5jjtg5ERBPdhp3NLsiDYyBLdCZTmT7zrLmwoBNzGQ",
+    "referral": null,
+    "amountInFormatted": "0.061974",
+    "amountOutFormatted": "121.168786815147992027",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 0
+      }
+    ],
+    "nearTxHashes": [
+      "ARG7bBC7kEGvDLFNHFat9f1K1Fa2S3jB1NFeadYm9aRB",
+      "BerEadjb5VmKNFjmYy2qkvZiX9Y5C4eMZi7mMVUgLQ9L"
+    ],
+    "originChainTxHashes": [
+      "0x4298ac93e59759292e619579f62ed3b16520a304dd2248bb741dfab6f60479c7"
+    ],
+    "destinationChainTxHashes": [
+      "0x2c8064c99f440424d81b728b3281981c6937cc79317d2e740cb21e8a176f874b"
+    ],
+    "amountIn": "61974000000000000",
+    "amountInUsd": "121.0377",
+    "amountOut": "121095830888107992029",
+    "amountOutUsd": "121.0377",
+    "refundTo": "0x1587b56e64Bb304391AEce2Ebf107aC4C5521b8E",
+    "senders": [
+      "0x1587b56e64bb304391aece2ebf107ac4c5521b8e"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:tron.omft.near",
+    "destinationAsset": "nep245:v2_1.omni.hot.tg:56_2CMMyVTGZkeyNZTSvS5sarzfir6g",
+    "depositAddress": "TK2qPYmZEDJcUBXvVbWVz7QjyfoHnSxJ64",
+    "depositMemo": null,
+    "depositAddressAndMemo": "TK2qPYmZEDJcUBXvVbWVz7QjyfoHnSxJ64",
+    "recipient": "0x1587b56e64Bb304391AEce2Ebf107aC4C5521b8E",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T12:53:14.441Z",
+    "createdAtTimestamp": 1772023994,
+    "intentHashes": "AgwkSEngwNgChYCAPZVfWh9tb4rmyXeGGRtmpnKCdHzH",
+    "referral": null,
+    "amountInFormatted": "1060.0",
+    "amountOutFormatted": "302.575772408022992048",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 0
+      }
+    ],
+    "nearTxHashes": [
+      "GSGPQdLiXtVWTB5VWVemM4pv2wASLYiWYiJPKUCyxNWn",
+      "DsdmsjXp1zZkMPNZ3e2kRBVDCZr61jZ24e4KZQ8JheTK"
+    ],
+    "originChainTxHashes": [
+      "d6a9659704f71c830ac25d9bb7f0f1d99c342c2769555d137469cf22a0c16819",
+      "b683cc4338d7b4487db96c8d5d96e51727ab7d644459c204726c7b19673fc2c2"
+    ],
+    "destinationChainTxHashes": [
+      "0x11ca254ad409a9666f11b0116562bc01cb585cdd98ed3cc3bef29c68b0380e9e"
+    ],
+    "amountIn": "1060000000",
+    "amountInUsd": "302.5918",
+    "amountOut": "302575764408014992040",
+    "amountOutUsd": "302.5410",
+    "refundTo": "TTyrQRaVwyV6LE8GCEEN7fRHYU9mHRucDv",
+    "senders": [
+      "TTyrQRaVwyV6LE8GCEEN7fRHYU9mHRucDv"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:eth-0xdac17f958d2ee523a2206206994597c13d831ec7.omft.near",
+    "destinationAsset": "nep141:eth-0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.omft.near",
+    "depositAddress": "0x2d8d9E44a2e81467fb3C1cd4ec75259c4Baa9F4d",
+    "depositMemo": null,
+    "depositAddressAndMemo": "0x2d8d9E44a2e81467fb3C1cd4ec75259c4Baa9F4d",
+    "recipient": "0x9D3D0dDF149d5116cbADD0461ef23aDc2463440A",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T12:45:55.629Z",
+    "createdAtTimestamp": 1772023555,
+    "intentHashes": "HV5Vam4Dj45BriWAd7E7fkn7kehbAU3bBmpLoquZxEH9",
+    "referral": null,
+    "amountInFormatted": "200.0",
+    "amountOutFormatted": "199.0996",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "5WVD5SGUVXubTsyaAYGB6LxY3VPS5P4vvrHdGvmfmasN",
+      "AX1CvLTtrTBCmrViCju6Cf91eiprbq6NRU9unRV4N32U"
+    ],
+    "originChainTxHashes": [
+      "0x4a92147ff4e934dc4414566260dbb414a60a8e8098b2dd7b5defe7fc137b7d90",
+      "0x4cac41ac707311499572a67fa131d8d2bc98ddc11cf7e228d3f4a50a99a61ff5"
+    ],
+    "destinationChainTxHashes": [
+      "0x1870ffd28ce0c4e3f1f8aabf7be3dc8e60ff6b9263be59f46ce9eba75bf935fa"
+    ],
+    "amountIn": "200000000",
+    "amountInUsd": "199.9878",
+    "amountOut": "199099600",
+    "amountOutUsd": "199.0747",
+    "refundTo": "0xf96dda404ac6ec26c3dd7ec41d57b33f45c9ee90",
+    "senders": [
+      "0x974CaA59e49682CdA0AD2bbe82983419A2ECC400"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:sol-5ce3bf3a31af18be40ba30f721101b4341690186.omft.near",
+    "destinationAsset": "nep141:eth-0xdac17f958d2ee523a2206206994597c13d831ec7.omft.near",
+    "depositAddress": "5XhUDFkfoG4LFSvHs9A38wqfuXF2VFT2Z3JC6tBpc3SC",
+    "depositMemo": null,
+    "depositAddressAndMemo": "5XhUDFkfoG4LFSvHs9A38wqfuXF2VFT2Z3JC6tBpc3SC",
+    "recipient": "0xA76c7038924F88B6f55A944E702D46b41BaB035E",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T12:39:06.636Z",
+    "createdAtTimestamp": 1772023146,
+    "intentHashes": "EwbzK656ghhAtP6JTXVvpzUPiVG2pJp1j5hvwDUumFo5",
+    "referral": null,
+    "amountInFormatted": "484.7",
+    "amountOutFormatted": "482.944448",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "FqdrmAjyZXG4SEyVVQxciSp86apJiPLB14j4q7KygUTS",
+      "6jxpShySSZxNMJS3tz79WBygmcitCmT26VRGtyBJhi7m"
+    ],
+    "originChainTxHashes": [
+      "TTxHdgXhJXhUbDkPpXptU4pieNCGkPW7t1Ueiguon1i57zqeELc6ZvUenDZR5Kho6jZUZsRqRUEYCTLQzUWThJM"
+    ],
+    "destinationChainTxHashes": [
+      "0x0e5b1592b916b0f6d7a9299368c2a8581c54650f8ec25562b2a99856776e069b"
+    ],
+    "amountIn": "484700000",
+    "amountInUsd": "484.6520",
+    "amountOut": "482944448",
+    "amountOutUsd": "482.8638",
+    "refundTo": "8NZc7iDZVwsJNR7AdeDGYe2GPLgpyZA5uCbo1D3JXZ62",
+    "senders": [
+      "8NZc7iDZVwsJNR7AdeDGYe2GPLgpyZA5uCbo1D3JXZ62"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:btc.omft.near",
+    "destinationAsset": "nep141:eth-0xdac17f958d2ee523a2206206994597c13d831ec7.omft.near",
+    "depositAddress": "17fA4cntYwhJrXbEaSLgfJme1LHusScunV",
+    "depositMemo": null,
+    "depositAddressAndMemo": "17fA4cntYwhJrXbEaSLgfJme1LHusScunV",
+    "recipient": "0xd04caaEAceFc6cd9C919B211b071E22C17CF5e57",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T12:36:05.023Z",
+    "createdAtTimestamp": 1772022965,
+    "intentHashes": "3mJno15Eyax7hJyKtEFdBtrkrKr9Tac9RX4qjLLuWDZX",
+    "referral": null,
+    "amountInFormatted": "0.0107",
+    "amountOutFormatted": "702.332719",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "5dU31wnySLDm3pLvMEqCFAprZ7UXGzj9fGTmuhLyUdW7",
+      "FTSYCfHVW4yWQ8h6BpVEprkNA6jD4M3x1KHFMeUXPiJ7"
+    ],
+    "originChainTxHashes": [
+      "2d3153c8fde5677b8d76af5cf72240ae24f2900904bd28d110fabb82fdbbe7ab"
+    ],
+    "destinationChainTxHashes": [
+      "0x04b57e753e8e33640be9417c3d69d30a2170c25723a581e5aa17ec88db5a2762"
+    ],
+    "amountIn": "1070000",
+    "amountInUsd": "704.1349",
+    "amountOut": "701460737",
+    "amountOutUsd": "701.3892",
+    "refundTo": "bc1q3c8ettk5cau6cyh3tkj4fwl45smt48j37u65vw",
+    "senders": [],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep245:v2_1.omni.hot.tg:56_2CMMyVTGZkeyNZTSvS5sarzfir6g",
+    "destinationAsset": "nep141:tron.omft.near",
+    "depositAddress": "0x4A4Dbbf4F67c48aCCE3cb41C2901950D7C6E8B9D",
+    "depositMemo": null,
+    "depositAddressAndMemo": "0x4A4Dbbf4F67c48aCCE3cb41C2901950D7C6E8B9D",
+    "recipient": "TVqTkDoBgSWqhiXTrG6CADxTUdv1MdAVYq",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T11:22:14.949Z",
+    "createdAtTimestamp": 1772018534,
+    "intentHashes": "3Kbs3VALt43iCs2gxTEVdp1dYqwnC4spdQyA1HP1HJtL",
+    "referral": null,
+    "amountInFormatted": "40.0",
+    "amountOutFormatted": "138.983025",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "8F8WbEa7hnGryxpQaoyRpvPdU4b8qBFzK4b3aGM69okd",
+      "4HzgacVUwYHKttCaE2xwqhYNRCnNQtXxRvHa98HhTcj7",
+      "5PwWHsSZNk7etNHje18GgecRtZEh5hs8rAp9CnZ7ykvb"
+    ],
+    "originChainTxHashes": [
+      "0x0a6940039406e7e6d754a680cd513c960d49b856e0662886d25fa248e7884078",
+      "0xf1ec78e961a1e625b95de033f9a26a6d91c7485c8d1b8a863726df3d113e2b04",
+      "0xbb04fa10f1f7556a28ecc7ad00237ed126e74f67101ffe03e9efaae5690039ec"
+    ],
+    "destinationChainTxHashes": [
+      "2846df9bf22449bbc4a792c392f788db1426673a2b339a1beb5b50e1f1cc4a4d"
+    ],
+    "amountIn": "40000000000000000000",
+    "amountInUsd": "39.9935",
+    "amountOut": "138983025",
+    "amountOutUsd": "39.7533",
+    "refundTo": "0x6e788Fd75BeA7B159D630332eB0d165CaaCfd01D",
+    "senders": [
+      "0x6e788Fd75BeA7B159D630332eB0d165CaaCfd01D",
+      "0x6e78c1de8a61c5e71c7b5b4a639d715caacfd01d",
+      "0x6e78aD979DBE024Dd21557d693204C1CAacfd01D"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:sol.omft.near",
+    "destinationAsset": "nep141:tron-d28a265909efecdcee7c5028585214ea0b96f015.omft.near",
+    "depositAddress": "4arMsk5u2VAdNt6HtgMMPGTMqvnxdvgemMk17tNXw7mf",
+    "depositMemo": null,
+    "depositAddressAndMemo": "4arMsk5u2VAdNt6HtgMMPGTMqvnxdvgemMk17tNXw7mf",
+    "recipient": "TVJfvQMj1f5ZSEP7RmYN82Yu13xcYamgnv",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T11:11:17.752Z",
+    "createdAtTimestamp": 1772017877,
+    "intentHashes": "G28L6upnnPFaFVPaHGMSudgy7XnQrSEnD4wrdf59ffXZ",
+    "referral": null,
+    "amountInFormatted": "36.55",
+    "amountOutFormatted": "3005.227342",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "H4NxQfLXRLNKH2RKE9dinBT1Vqo6esfG5vvurZEhxDMi",
+      "AicTTTGGhf3xfzCcJDzVXzikAVDUzfq2XtNe7pez5Y55"
+    ],
+    "originChainTxHashes": [
+      "26AMFTGQBVUBeKMinDUApMstMPrNnPc3vmzBBeaP5eAc7qBq8DN8ZpJdxMoRSPSxz6JsRKD7miEQ9m1SDDqRjPDi"
+    ],
+    "destinationChainTxHashes": [
+      "b715850c15ed9b0e722a13315f2a8c91128701d21ff119be75818177c8a748ba"
+    ],
+    "amountIn": "36550000000",
+    "amountInUsd": "3015.7405",
+    "amountOut": "3005273575",
+    "amountOutUsd": "3004.6875",
+    "refundTo": "3YdRpmCYgbJRv3yVKwtLjaK4nWmG44tPLoXg8DjD1Chh",
+    "senders": [
+      "3YdRpmCYgbJRv3yVKwtLjaK4nWmG44tPLoXg8DjD1Chh"
+    ],
+    "refundReason": "INTENT_SUBMIT_FAILED"
+  },
+  {
+    "originAsset": "nep141:ltc.omft.near",
+    "destinationAsset": "nep141:tron-d28a265909efecdcee7c5028585214ea0b96f015.omft.near",
+    "depositAddress": "LaykEpsDwbs8w3z4gPw2rDk9s3WkBC7BA5",
+    "depositMemo": null,
+    "depositAddressAndMemo": "LaykEpsDwbs8w3z4gPw2rDk9s3WkBC7BA5",
+    "recipient": "TRyMotXwBuYouaR81RubP9spgSkTTXjFGM",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T10:56:11.210Z",
+    "createdAtTimestamp": 1772016971,
+    "intentHashes": "95LYywazwThGhYTtRCfkD5SZi7JzhAWJjXnwEpFwTM5g",
+    "referral": null,
+    "amountInFormatted": "0.2",
+    "amountOutFormatted": "9.604736",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "3q7wfVQ34vdoVX7AFEVYKUQvkB9kQKoXSthERvRyMkjf",
+      "EcvKSmuP77DadjVLn1kjqc4McBYvBeMpeiHiyvdVdabQ"
+    ],
+    "originChainTxHashes": [
+      "658e190698f8c107e8b8664cc9778603b61dab6383c295bd014aedf84b3627c7"
+    ],
+    "destinationChainTxHashes": [
+      "152dc5a58bf0af76c65e0c69ec9757984440dc19cbfc94ff26069acb4cd00398"
+    ],
+    "amountIn": "20000000",
+    "amountInUsd": "10.6380",
+    "amountOut": "9604736",
+    "amountOutUsd": "9.6032",
+    "refundTo": "LVqQm7vfh5gwqoJNg3xN1oMSLxvDAh9vPX",
+    "senders": [],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:ltc.omft.near",
+    "destinationAsset": "nep141:tron-d28a265909efecdcee7c5028585214ea0b96f015.omft.near",
+    "depositAddress": "LNf8vdbtqCN4DxfEVi6ssvbwvdw4WXJAiz",
+    "depositMemo": null,
+    "depositAddressAndMemo": "LNf8vdbtqCN4DxfEVi6ssvbwvdw4WXJAiz",
+    "recipient": "TRyMotXwBuYouaR81RubP9spgSkTTXjFGM",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T10:26:06.941Z",
+    "createdAtTimestamp": 1772015166,
+    "intentHashes": "D89jFbQXEsBhsE2dHGty9ep7qWLiCHohbpvJFZeZC2w6",
+    "referral": null,
+    "amountInFormatted": "0.68",
+    "amountOutFormatted": "33.988308",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "6vuo4Rtsr7vnaVoTHQx5hnV9Atk37AwWWsPCgBsQBHqh",
+      "ATRT71DrgKRF8W8XsTcr9CttDqx6JrX13Qm2nDdrgdLK"
+    ],
+    "originChainTxHashes": [
+      "146b57e3eafd9c1000c4a39f6af4c43f64177aabfd6268b9c372b60408bb1b2b"
+    ],
+    "destinationChainTxHashes": [
+      "886a57f3718d3f53e54c72879093b1b7577d58d4b2489c44dd8718bae926b776"
+    ],
+    "amountIn": "68000000",
+    "amountInUsd": "36.1896",
+    "amountOut": "33995120",
+    "amountOutUsd": "33.9914",
+    "refundTo": "LVqQm7vfh5gwqoJNg3xN1oMSLxvDAh9vPX",
+    "senders": [],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:sol.omft.near",
+    "destinationAsset": "nep245:v2_1.omni.hot.tg:56_11111111111111111111",
+    "depositAddress": "FQm1fDHJUYYh4koLCtQjUjERXZ3coWGjtbmNBd96FwtH",
+    "depositMemo": null,
+    "depositAddressAndMemo": "FQm1fDHJUYYh4koLCtQjUjERXZ3coWGjtbmNBd96FwtH",
+    "recipient": "0x0fdaF11e4e0ca3FF69294759FB7Cb4Da931b4a69",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T09:49:08.648Z",
+    "createdAtTimestamp": 1772012948,
+    "intentHashes": "5Peb37E1HpPfqDnaLE8XTNYZyxpDNWtxbv3Kwoj9Sd6A",
+    "referral": null,
+    "amountInFormatted": "0.1",
+    "amountOutFormatted": "0.013682928389192599",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 0
+      }
+    ],
+    "nearTxHashes": [
+      "Czdi8QrPN9rKBJDgAVWX9RYe3zgNZ7JRBAqxth9bd4yh",
+      "4oq1Bh9TPsGKaFpiqteRqoGNw363eQZzqvSqxhs25ApS"
+    ],
+    "originChainTxHashes": [
+      "3QGroJZZDgyVeMTUxsDfYC1ZnusS4HRbiWE9QA5tfMfUQ4VTssRjnw4V1xkQdBDbBpdanuspWwZ3344Qhy9pvnx7"
+    ],
+    "destinationChainTxHashes": [
+      "0x52ee0a90007fff703b84c80befd803fff6af77d8432439880b82e0643598b51d"
+    ],
+    "amountIn": "100000000",
+    "amountInUsd": "8.2330",
+    "amountOut": "13681462965093207",
+    "amountOutUsd": "8.2182",
+    "refundTo": "4ixycRdH97uSXafZDVJQwtsJPQUZiiLpteMxEKjtKaPz",
+    "senders": [
+      "4ixycRdH97uSXafZDVJQwtsJPQUZiiLpteMxEKjtKaPz"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:eth-0xdac17f958d2ee523a2206206994597c13d831ec7.omft.near",
+    "destinationAsset": "nep245:v2_1.omni.hot.tg:56_2CMMyVTGZkeyNZTSvS5sarzfir6g",
+    "depositAddress": "0x4CE5898EAA28067b76ef29472a6a3052ae8e0e41",
+    "depositMemo": null,
+    "depositAddressAndMemo": "0x4CE5898EAA28067b76ef29472a6a3052ae8e0e41",
+    "recipient": "0x0fdaF11e4e0ca3FF69294759FB7Cb4Da931b4a69",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T09:47:19.354Z",
+    "createdAtTimestamp": 1772012839,
+    "intentHashes": "5AD8aRjkUmJscbou3FGWjSYZpCviaPNpEbaXvUgdGqdJ",
+    "referral": null,
+    "amountInFormatted": "198.8",
+    "amountOutFormatted": "198.791786192382992183",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 0
+      }
+    ],
+    "nearTxHashes": [
+      "CVn5WzQUuHLgog3tcbrRpyZpvPPTdnuP4cGMH7BDR29z",
+      "3PdtCfNZxWv88SUuVmoEtt78z3cEEVtvNcUxLqVzU4Pi"
+    ],
+    "originChainTxHashes": [
+      "0x9a6f4d7577f06bf7ab86c936afc574b9be11f818d4a5f9694c2d4e69f1c2a6a6"
+    ],
+    "destinationChainTxHashes": [
+      "0xbb5b9262fd4f5fb48d7a1d40733e69e3808714e67835c1d4c1716697d4e47f48"
+    ],
+    "amountIn": "198800000",
+    "amountInUsd": "198.7708",
+    "amountOut": "198791787192383992184",
+    "amountOutUsd": "198.7626",
+    "refundTo": "0x0fdaF11e4e0ca3FF69294759FB7Cb4Da931b4a69",
+    "senders": [
+      "0x0fdaF11e4e0ca3FF69294759FB7Cb4Da931b4a69"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:btc.omft.near",
+    "destinationAsset": "nep141:eth-0xdac17f958d2ee523a2206206994597c13d831ec7.omft.near",
+    "depositAddress": "1NfrhKrVGW8kbU6hK5WYpU5WUfpEd3bqVo",
+    "depositMemo": null,
+    "depositAddressAndMemo": "1NfrhKrVGW8kbU6hK5WYpU5WUfpEd3bqVo",
+    "recipient": "0x0fdaF11e4e0ca3FF69294759FB7Cb4Da931b4a69",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T09:20:35.233Z",
+    "createdAtTimestamp": 1772011235,
+    "intentHashes": "7oGtbJ7EDBiiVAKpYrVf7LSWQrKw78mYHrdiMHTww5FL",
+    "referral": null,
+    "amountInFormatted": "0.00304",
+    "amountOutFormatted": "198.805634",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 0
+      }
+    ],
+    "nearTxHashes": [
+      "4YtFRbNw1KcPMRHa7fQh4YYg53GBbfAuUPrXWB7wP2J6",
+      "74HAyMMgj3M4beijQuaq7GP2d7Mq9ni9rcQ5PM2WSHnN"
+    ],
+    "originChainTxHashes": [
+      "9330c18f45f06e58b36d8fc07df4fa061650a9643305c65ae684572de9646bbc"
+    ],
+    "destinationChainTxHashes": [
+      "0x372ee91f3c1729435c825b6d1df7c21bee4d2cfbb0faa06d0dc59a04ba14f1bb"
+    ],
+    "amountIn": "304000",
+    "amountInUsd": "199.1960",
+    "amountOut": "198894874",
+    "amountOutUsd": "198.8644",
+    "refundTo": "bc1qyz6gtjhqra3vd8e7zx342jqvsxxyn603sv68xx",
+    "senders": [],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep245:v2_1.omni.hot.tg:56_2CMMyVTGZkeyNZTSvS5sarzfir6g",
+    "destinationAsset": "nep141:tron.omft.near",
+    "depositAddress": "0x8c07d7D2d40a71289DbF9f22c0948Dd164F312c9",
+    "depositMemo": null,
+    "depositAddressAndMemo": "0x8c07d7D2d40a71289DbF9f22c0948Dd164F312c9",
+    "recipient": "TGYHcssWywtHth4Yk1wXZ1cVzJ1qsed4s9",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T08:31:12.016Z",
+    "createdAtTimestamp": 1772008272,
+    "intentHashes": "DFiTo7azgBXPQKhqXFjohoz69y9uuMAQ2MSsw8Cde8nZ",
+    "referral": null,
+    "amountInFormatted": "5.0",
+    "amountOutFormatted": "17.064553",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "5v5JTQmUJ8eH3uTmkZ2m6eNuSugU6oafQc5BhALqBjkD",
+      "Gsk8Y6dPksKthJR6nrkmQFxKDMyWsjWviesi2B8uMyc9",
+      "3zLAKMmohFmuBYuiiGB4Gc9N86hGTJkR9h1pzt38tUSS"
+    ],
+    "originChainTxHashes": [
+      "0x8366550e9cfc5f8b8601a285b4002a7e4aebb71fb83a45ada9c6edc05ff2de47",
+      "0xe839a390fc59266ac9c15484e6b290adc226ebdec232b6fb4d9370d47d3f6c46"
+    ],
+    "destinationChainTxHashes": [
+      "6ae2615668a2099004cc11f40b5123d7e44a24fcd908a3225dc9e426c30ffaec"
+    ],
+    "amountIn": "5000000000000000000",
+    "amountInUsd": "4.9992",
+    "amountOut": "17064553",
+    "amountOutUsd": "4.8911",
+    "refundTo": "0x6e788Fd75BeA7B159D630332eB0d165CaaCfd01D",
+    "senders": [
+      "0x6e788Fd75BeA7B159D630332eB0d165CaaCfd01D",
+      "0x6e78c1de8a61c5e71c7b5b4a639d715caacfd01d"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:eth-0x6b175474e89094c44da98b954eedeac495271d0f.omft.near",
+    "destinationAsset": "nep245:v2_1.omni.hot.tg:56_2CMMyVTGZkeyNZTSvS5sarzfir6g",
+    "depositAddress": "0x1CCb2E973eC98012cA382972DD22579008736c9e",
+    "depositMemo": null,
+    "depositAddressAndMemo": "0x1CCb2E973eC98012cA382972DD22579008736c9e",
+    "recipient": "0x1587b56e64Bb304391AEce2Ebf107aC4C5521b8E",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T07:22:14.167Z",
+    "createdAtTimestamp": 1772004134,
+    "intentHashes": "2SbEpAGRySsTz2gyaZCwNtyrpxo5qrEcmyGW62RsbthC",
+    "referral": null,
+    "amountInFormatted": "8000.0",
+    "amountOutFormatted": "7995.168750807769992257",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 0
+      }
+    ],
+    "nearTxHashes": [
+      "DsD4ziEiboLHM5fRQf5Y4i1vg2w9b2GRK9jKCzhkne5k",
+      "3D5oXSyiqZAKyBWy18bgS1xU7SE6wxvEyLKVh93fwFoP",
+      "DgWcRJpm8w2UaFGapCEYAUPzVvvn2nagp8VPgs6trrUt"
+    ],
+    "originChainTxHashes": [
+      "0x886dd0e188c629c23eed1b91accb46c358cacdb6c8b847cace89357d06d0d6d6",
+      "0x3911fe01899682c7a561ea89ca33e02ae8a2724f673ebc7f35678b3cc20f892f"
+    ],
+    "destinationChainTxHashes": [
+      "0x534c0c6bf78aa40ecc9b9a2ec1ebc95222a025d9ab442dbd5244687a43aea78f"
+    ],
+    "amountIn": "8000000000000000000000",
+    "amountInUsd": "7995.2480",
+    "amountOut": "7995168752807771992259",
+    "amountOutUsd": "7993.9295",
+    "refundTo": "0x1587b56e64Bb304391AEce2Ebf107aC4C5521b8E",
+    "senders": [
+      "0x1587b56e64Bb304391AEce2Ebf107aC4C5521b8E"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:sol.omft.near",
+    "destinationAsset": "nep141:eth.omft.near",
+    "depositAddress": "DRHGr2i88jojvNAPuVqwXwmgkrYj6UcfSGMjJCejmUuq",
+    "depositMemo": null,
+    "depositAddressAndMemo": "DRHGr2i88jojvNAPuVqwXwmgkrYj6UcfSGMjJCejmUuq",
+    "recipient": "0xcbDD74E6ff815C969cAC336606Fe9B64Ed809A78",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T02:53:08.006Z",
+    "createdAtTimestamp": 1771987988,
+    "intentHashes": "8BDbqSCTxaLhybSPnzju2ErCujq7fHfoBwCA5xEPxtMB",
+    "referral": null,
+    "amountInFormatted": "24.29",
+    "amountOutFormatted": "1.037565365983208155",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "5AMNNKEeLNPF4PkHNce7V7DUuXCVHuCjbknjQhFLw1Th",
+      "3RRTvX6dUEnLRXgBzMxVdcLqep7Q8GJoa2vLRTheWG5C"
+    ],
+    "originChainTxHashes": [
+      "4AbakCSWAnLdSHsZrNTbADNFJvfSFLxRbhaxHsPTG4ZTsB5RNM3UYKm6LtvyhLLhgMPsfLRLJN1s3J7atLBT7hQc"
+    ],
+    "destinationChainTxHashes": [
+      "0x0946fc16073905df58fea32cc7bcf553950d030ace7876e9d97b383634d19f25"
+    ],
+    "amountIn": "24290000000",
+    "amountInUsd": "2000.7673",
+    "amountOut": "1036933680500312089",
+    "amountOutUsd": "1997.3105",
+    "refundTo": "DPkn958a3pBdEzEcXHWp257BHSKrAEFjrNLqDGsHz5VD",
+    "senders": [
+      "DPkn958a3pBdEzEcXHWp257BHSKrAEFjrNLqDGsHz5VD"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:btc.omft.near",
+    "destinationAsset": "nep141:eth.omft.near",
+    "depositAddress": "127Lya2BxeV4Mnqg2efYJFUQkMMrHcy4GG",
+    "depositMemo": null,
+    "depositAddressAndMemo": "127Lya2BxeV4Mnqg2efYJFUQkMMrHcy4GG",
+    "recipient": "0x0810026347893989D6C667f6af98E4aDf24cd2a1",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T02:04:42.859Z",
+    "createdAtTimestamp": 1771985082,
+    "intentHashes": "EPxhYjmVBfjSomJJkCunUSbuD68bNcRRrEVpDjq42yD7",
+    "referral": null,
+    "amountInFormatted": "0.00757117",
+    "amountOutFormatted": "0.258167198163046714",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "DAtsxaAHeBWuB57RF4f62Fpgo73CsJkd47npnsf8E3s9",
+      "6zNvVFtjNPwrF5f2Vsvx4gokP81PCoiAvWEooUFadcmm"
+    ],
+    "originChainTxHashes": [
+      "51b21ace4642dcb23f54a7c56bd88188456d86303c5449a8c53724c860ae86de"
+    ],
+    "destinationChainTxHashes": [
+      "0x520f1168643d93b8a04fe2dd7da8232524e2b79feb2d5ea110681526b14454fe"
+    ],
+    "amountIn": "757117",
+    "amountInUsd": "499.7578",
+    "amountOut": "259142541577953280",
+    "amountOutUsd": "497.7843",
+    "refundTo": "bc1qc0nxhc268s4gfy23d47rjq2mf3063tjphysefe",
+    "senders": [],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:eth.omft.near",
+    "destinationAsset": "nep245:v2_1.omni.hot.tg:56_2CMMyVTGZkeyNZTSvS5sarzfir6g",
+    "depositAddress": "0xEb258E8306C3d83ce7E3723B2BCCCE43beCf39bD",
+    "depositMemo": null,
+    "depositAddressAndMemo": "0xEb258E8306C3d83ce7E3723B2BCCCE43beCf39bD",
+    "recipient": "0x25E60611887f8354ac6997D7167ba68d01fEf0EE",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-25T00:17:48.104Z",
+    "createdAtTimestamp": 1771978668,
+    "intentHashes": "D7RA8EnvzK1iHEAibuNGVgCmU3Rq9mM2vW4D6LUdAoF9",
+    "referral": null,
+    "amountInFormatted": "0.02775",
+    "amountOutFormatted": "51.198264786499992407",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "AfNbinWWTW4nP8T18fK7HzkPGqvBVxQKVEdTKW5KJwqK",
+      "6Zq7hzcXsVnUEwAfiUdijzoE6y7WDhyxtrRgGY9LtMzT"
+    ],
+    "originChainTxHashes": [
+      "0xe33fbf78b2e6f5e46ee39fc22cdd3d8ae6334130143227afa7ad0992e7c5ece0"
+    ],
+    "destinationChainTxHashes": [
+      "0xe442e5d1c1fb62487da0e56e6040d8f89c03c0941c4fc0b413e431fd35ff9e5d"
+    ],
+    "amountIn": "27750000000000000",
+    "amountInUsd": "51.2945",
+    "amountOut": "51151594833181992413",
+    "amountOutUsd": "51.1516",
+    "refundTo": "0x25E60611887f8354ac6997D7167ba68d01fEf0EE",
+    "senders": [
+      "0x25e60611887f8354ac6997d7167ba68d01fef0ee"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep245:v2_1.omni.hot.tg:56_2CMMyVTGZkeyNZTSvS5sarzfir6g",
+    "destinationAsset": "nep245:v2_1.omni.hot.tg:56_11111111111111111111",
+    "depositAddress": "0x62F42c504323A9C0A3cA3BAf9Ae535f977bAd671",
+    "depositMemo": null,
+    "depositAddressAndMemo": "0x62F42c504323A9C0A3cA3BAf9Ae535f977bAd671",
+    "recipient": "0x7bf148bf659ce7da2b99c2bef3cac183062536ea",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-24T23:56:50.420Z",
+    "createdAtTimestamp": 1771977410,
+    "intentHashes": "FanjsJA2UHduD4m9XWyUdVnYuGfUWpEXGDeRCMXiP633",
+    "referral": null,
+    "amountInFormatted": "0.1455",
+    "amountOutFormatted": "0.000235265139313591",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "Z51PXr9aQc4Q44gkW6KgNeE4xsypnBF381tjN57jWHZ",
+      "A15W4d9KW4ea64zxGchZUYdcCLXTuxWYeTbV59WcJ7D6"
+    ],
+    "originChainTxHashes": [
+      "0x0569797a462028cf8245caa54dba20601e67ae6ce3b79d8736fab07a44e07a9b"
+    ],
+    "destinationChainTxHashes": [
+      "0x83b7cffe48eb4d3d01f9046f9bad04545df1011d4defafd2c11327cd51691f02"
+    ],
+    "amountIn": "145500000000000000",
+    "amountInUsd": "0.1455",
+    "amountOut": "235256637519529",
+    "amountOutUsd": "0.1374",
+    "refundTo": "0x7bf148bf659ce7da2b99c2bef3cac183062536ea",
+    "senders": [
+      "0x7bf148Bf659ce7da2b99C2bEf3caC183062536eA"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep245:v2_1.omni.hot.tg:137_3hpYoaLtt8MP1Z2GH1U473DMRKgr",
+    "destinationAsset": "nep245:v2_1.omni.hot.tg:56_2CMMyVTGZkeyNZTSvS5sarzfir6g",
+    "depositAddress": "0x242b3eEF944123FB2547e8495965AfB5223879F9",
+    "depositMemo": null,
+    "depositAddressAndMemo": "0x242b3eEF944123FB2547e8495965AfB5223879F9",
+    "recipient": "0x7bf148bf659ce7da2b99c2bef3cac183062536ea",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-24T23:52:33.931Z",
+    "createdAtTimestamp": 1771977153,
+    "intentHashes": "G4MJND2yHZgfxMJnQRfX2ps3ctKkVHQBQTdXDvZp4PBf",
+    "referral": null,
+    "amountInFormatted": "43.28",
+    "amountOutFormatted": "43.142476842287992403",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "4zYjn1G9smqrx7YmCixaz8MjPrJeivvLRQxDV4MxS8eb",
+      "46X73UackvxNhxiowtQ8GxVnS1RgGL6jRPN1dD1uPz3A",
+      "BJhorwt6hRP5ADAUVcsQFt1LdgWZ69fP58SeA3SrUJxR"
+    ],
+    "originChainTxHashes": [
+      "0x647c38456b15c612a448aee27b8c82db6414d23b2f9f1b534163677acb85ee3e"
+    ],
+    "destinationChainTxHashes": [
+      "0x477316d00c98568f722e1b2e39474d879b4a8b1f03f6af5692804e53d4ae0eea"
+    ],
+    "amountIn": "43280000",
+    "amountInUsd": "43.2800",
+    "amountOut": "43142475842286992402",
+    "amountOutUsd": "43.1425",
+    "refundTo": "0x7bf148bf659ce7da2b99c2bef3cac183062536ea",
+    "senders": [
+      "0x7bf148Bf659ce7da2b99C2bEf3caC183062536eA"
+    ],
+    "refundReason": null
+  },
+  {
+    "originAsset": "nep141:eth.omft.near",
+    "destinationAsset": "nep141:sol-c800a4bd850783ccb82c2b2c7e84175443606352.omft.near",
+    "depositAddress": "0xfdECbA47aB8C8baB47E399769BD8878b71C4331b",
+    "depositMemo": null,
+    "depositAddressAndMemo": "0xfdECbA47aB8C8baB47E399769BD8878b71C4331b",
+    "recipient": "5Um2cput7ctVNvpbbt15ZfEDEf52YDFRAFTCJr2LiZwz",
+    "status": "SUCCESS",
+    "createdAt": "2026-02-24T23:07:01.342Z",
+    "createdAtTimestamp": 1771974421,
+    "intentHashes": "2vFZ9cEgdK9cAu5H9TbCqrq45WxqMmEqhWYi4vVQJx3P",
+    "referral": null,
+    "amountInFormatted": "1.61309",
+    "amountOutFormatted": "2982.803268",
+    "appFees": [
+      {
+        "recipient": "Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1",
+        "fee": 30
+      }
+    ],
+    "nearTxHashes": [
+      "5eBVnfXJYDwuc5FhowviMrkEGFcx8Zey1CE7a8yTjaBJ",
+      "AK36gRu46NmtXp3orgeehoW6PBb9LZD4eNRuwYfmT5hT",
+      "B32Tf35MHDKePJwtqP1TYi6jnA2ArhcLosEUjW7AbwFP"
+    ],
+    "originChainTxHashes": [
+      "0x5195ea5663f2956ba8207f464c323fa6b50a755c662514c8a50f68a8441a37fa",
+      "0x3d13ef34ecf155f879250d49c07941df728cb9bfd454c52b4a31d154751d3cca",
+      "0x3f09e21079357ae7e6ce741799bd05e627bd7029ef049e08876e74d34aed1660"
+    ],
+    "destinationChainTxHashes": [
+      "3pmHW2BmcTB1nrhjHHfBVQS46SK9tAdJGEQzVDBWfamoTDeozRF75YwCAeh5Eiwo5sqPF23fxRPBznyP4dTCQ71k"
+    ],
+    "amountIn": "1613090000000000000",
+    "amountInUsd": "2994.6532",
+    "amountOut": "2978205983",
+    "amountOutUsd": "2978.2060",
+    "refundTo": "0x82a44cBEb0cFA4971cB7ef337FA2286AeD2717AE",
+    "senders": [
+      "0x82a44cbeb0cfa4971cb7ef337fa2286aed2717ae"
+    ],
+    "refundReason": "PARTIAL_DEPOSIT"
+  },
+  {
     "originAsset": "nep141:eth-0x6b175474e89094c44da98b954eedeac495271d0f.omft.near",
     "destinationAsset": "nep141:sol.omft.near",
     "depositAddress": "0xaf9FF26a72ccbd7db05D0811b36e635C334Dcd75",
@@ -4445,7 +5612,9 @@
       "0x2752867e50777ff2adcb06e6d06ba6118af79996034a129558dd6ef72d0f5f20",
       "0x13e1a45d74ad160fd32c378e0dbd6e82c1527c6cc134768505f7b9447dc83134"
     ],
-    "destinationChainTxHashes": [],
+    "destinationChainTxHashes": [
+      "0x13e1a45d74ad160fd32c378e0dbd6e82c1527c6cc134768505f7b9447dc83134"
+    ],
     "amountIn": "5217000000",
     "amountInUsd": "5216.9687",
     "amountOut": "2700318699181969329",
