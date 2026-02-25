@@ -13,7 +13,7 @@ ARG BUILD_LOG_URL
 
 RUN FINAL_HASH="${COMMIT_HASH}"; \
     if [ -z "$FINAL_HASH" ]; then \
-      FINAL_HASH=$(git clone --depth=1 https://github.com/uSwapExchange/uswap-zero.git /tmp/repo 2>/dev/null && cd /tmp/repo && git rev-parse HEAD || echo "unknown"); \
+      FINAL_HASH=$(git clone --depth=1 https://github.com/uSwapExchange/zero.git /tmp/repo 2>/dev/null && cd /tmp/repo && git rev-parse HEAD || echo "unknown"); \
       rm -rf /tmp/repo; \
     fi && \
     FINAL_TIME="${BUILD_TIME}"; \
@@ -22,10 +22,10 @@ RUN FINAL_HASH="${COMMIT_HASH}"; \
     fi && \
     CGO_ENABLED=0 GOOS=linux go build \
       -ldflags "-s -w -X main.commitHash=${FINAL_HASH} -X main.buildTime=${FINAL_TIME} -X main.buildLogURL=${BUILD_LOG_URL}" \
-      -o /uswap-zero
+      -o /zero
 
 FROM scratch
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /uswap-zero /uswap-zero
+COPY --from=builder /zero /zero
 EXPOSE 3000
-ENTRYPOINT ["/uswap-zero"]
+ENTRYPOINT ["/zero"]

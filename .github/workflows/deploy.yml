@@ -7,7 +7,7 @@ on:
       - 'DEPLOYMENT.md'
 
 env:
-  IMAGE: ghcr.io/uswapexchange/uswap-zero
+  IMAGE: ghcr.io/uswapexchange/zero
 
 jobs:
   test:

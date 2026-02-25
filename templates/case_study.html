@@ -68,7 +68,7 @@
       </tbody>
     </table>
 
-    <p class="text-muted"><a href="https://raw.githubusercontent.com/uSwapExchange/uswap-zero/main/data/swapmy_transactions.json" class="text-accent">View all {{.SwapMy.TotalSwaps}} Swap.my transactions (raw JSON) &rarr;</a></p>
+    <p class="text-muted"><a href="https://raw.githubusercontent.com/uSwapExchange/zero/main/data/swapmy_transactions.json" class="text-accent">View all {{.SwapMy.TotalSwaps}} Swap.my transactions (raw JSON) &rarr;</a></p>
 
     <h3>Quote Discrepancy</h3>
     <p>In our testing, Swap.my quoted a user <code>0.748856 USDT</code> for a 0.01 SOL swap. The NEAR Intents Explorer shows the solver actually filled <code>0.749848 USDT</code>. The difference is small on a $0.78 swap — but on a $10,000 swap at 72 bps, the user loses $72 to an invisible fee they never agreed to.</p>
@@ -125,7 +125,7 @@
       </tbody>
     </table>
 
-    <p class="text-muted"><a href="https://raw.githubusercontent.com/uSwapExchange/uswap-zero/main/data/eagleswap_transactions.json" class="text-accent">View all {{.Eagle.TotalSwaps}} EagleSwap transactions (raw JSON) &rarr;</a></p>
+    <p class="text-muted"><a href="https://raw.githubusercontent.com/uSwapExchange/zero/main/data/eagleswap_transactions.json" class="text-accent">View all {{.Eagle.TotalSwaps}} EagleSwap transactions (raw JSON) &rarr;</a></p>
 
     <h3>Security Issues</h3>
     <p>EagleSwap exposes an unauthenticated API at <code>/api/swap/{id}</code> that leaks:</p>
@@ -288,9 +288,9 @@ affiliate=swapmybuddy.near&perPage=10"
       <div class="evidence-block__title">Raw Data</div>
       <p>Every transaction referenced in this report is included in our repository as raw JSON:</p>
       <ul>
-        <li><a href="https://raw.githubusercontent.com/uSwapExchange/uswap-zero/main/data/eagleswap_transactions.json" class="text-accent">eagleswap_transactions.json</a> — {{.Eagle.TotalSwaps}} EagleSwap transactions</li>
-        <li><a href="https://raw.githubusercontent.com/uSwapExchange/uswap-zero/main/data/swapmy_transactions.json" class="text-accent">swapmy_transactions.json</a> — {{.SwapMy.TotalSwaps}} Swap.my transactions</li>
-        <li><a href="https://raw.githubusercontent.com/uSwapExchange/uswap-zero/main/data/near_intents_reseller_analysis.json" class="text-accent">near_intents_reseller_analysis.json</a> — Summary statistics</li>
+        <li><a href="https://raw.githubusercontent.com/uSwapExchange/zero/main/data/eagleswap_transactions.json" class="text-accent">eagleswap_transactions.json</a> — {{.Eagle.TotalSwaps}} EagleSwap transactions</li>
+        <li><a href="https://raw.githubusercontent.com/uSwapExchange/zero/main/data/swapmy_transactions.json" class="text-accent">swapmy_transactions.json</a> — {{.SwapMy.TotalSwaps}} Swap.my transactions</li>
+        <li><a href="https://raw.githubusercontent.com/uSwapExchange/zero/main/data/near_intents_reseller_analysis.json" class="text-accent">near_intents_reseller_analysis.json</a> — Summary statistics</li>
       </ul>
     </div>
   </div>

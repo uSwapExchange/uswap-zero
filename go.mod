@@ -1,3 +1,3 @@
-module github.com/uSwapExchange/uswap-zero
+module github.com/uSwapExchange/zero
 
 go 1.23.6

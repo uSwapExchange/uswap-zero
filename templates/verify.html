@@ -17,7 +17,7 @@
         {{if or (eq .CommitHash "development") (eq .CommitHash "unknown") (eq .CommitHash "")}}
           <span class="text-muted">development (local build)</span>
         {{else}}
-          <a href="https://github.com/uSwapExchange/uswap-zero/commit/{{.CommitHash}}">{{slice .CommitHash 0 12}}</a>
+          <a href="https://github.com/uSwapExchange/zero/commit/{{.CommitHash}}">{{slice .CommitHash 0 12}}</a>
         {{end}}
       </span>
     </div>
@@ -44,20 +44,20 @@
     <h2>VERIFY IT YOURSELF</h2>
     <div class="terminal-block">
       <pre><code><span class="comment"># Clone the source code</span>
-git clone https://github.com/uSwapExchange/uswap-zero.git
-cd uswap-zero
+git clone https://github.com/uSwapExchange/zero.git
+cd zero
 
 <span class="comment"># Verify the code matches this deployment</span>
 git checkout {{.CommitHash}}
 
 <span class="comment"># Build locally (requires Go 1.23+)</span>
-go build -o uswap-zero .
+go build -o zero .
 
 <span class="comment"># Or build with Docker (exact same as production)</span>
-docker build -t uswap-zero .
+docker build -t zero .
 
 <span class="comment"># Run locally</span>
-ORDER_SECRET=$(openssl rand -hex 32) ./uswap-zero</code></pre>
+ORDER_SECRET=$(openssl rand -hex 32) ./zero</code></pre>
     </div>
   </div>
 
@@ -67,35 +67,35 @@ ORDER_SECRET=$(openssl rand -hex 32) ./uswap-zero</code></pre>
     <p class="text-muted mb-16" style="font-size:0.82rem;">The entire application is ~1200 lines of Go across 8 files. Here's what to look for:</p>
 
     <div class="audit-item">
-      <a href="https://github.com/uSwapExchange/uswap-zero/blob/main/nearintents.go" class="audit-item__file">nearintents.go</a>
+      <a href="https://github.com/uSwapExchange/zero/blob/main/nearintents.go" class="audit-item__file">nearintents.go</a>
       <span class="audit-item__desc">Zero fee markup. The API call passes amounts through untouched. Search for "appFees" — it's an empty array.</span>
     </div>
     <div class="audit-item">
-      <a href="https://github.com/uSwapExchange/uswap-zero/blob/main/handlers.go" class="audit-item__file">handlers.go</a>
+      <a href="https://github.com/uSwapExchange/zero/blob/main/handlers.go" class="audit-item__file">handlers.go</a>
       <span class="audit-item__desc">Zero logging of user data. No IP addresses, amounts, or addresses are stored. The only log is cache refresh counts.</span>
     </div>
     <div class="audit-item">
-      <a href="https://github.com/uSwapExchange/uswap-zero/blob/main/crypto.go" class="audit-item__file">crypto.go</a>
+      <a href="https://github.com/uSwapExchange/zero/blob/main/crypto.go" class="audit-item__file">crypto.go</a>
       <span class="audit-item__desc">Order tokens are AES-256-GCM encrypted. The key is random per restart (unless ORDER_SECRET is set). No server-side storage.</span>
     </div>
     <div class="audit-item">
-      <a href="https://github.com/uSwapExchange/uswap-zero/blob/main/main.go" class="audit-item__file">main.go</a>
+      <a href="https://github.com/uSwapExchange/zero/blob/main/main.go" class="audit-item__file">main.go</a>
       <span class="audit-item__desc">No middleware that logs requests. No analytics. No external service calls except NEAR Intents API.</span>
     </div>
     <div class="audit-item">
-      <a href="https://github.com/uSwapExchange/uswap-zero/blob/main/tokencache.go" class="audit-item__file">tokencache.go</a>
+      <a href="https://github.com/uSwapExchange/zero/blob/main/tokencache.go" class="audit-item__file">tokencache.go</a>
       <span class="audit-item__desc">The only in-memory state: a cached copy of the public token list. Refreshed every 5 minutes. No user data.</span>
     </div>
     <div class="audit-item">
-      <a href="https://github.com/uSwapExchange/uswap-zero/tree/main/templates" class="audit-item__file">templates/</a>
+      <a href="https://github.com/uSwapExchange/zero/tree/main/templates" class="audit-item__file">templates/</a>
       <span class="audit-item__desc">Pure HTML. No analytics scripts. No tracking pixels. No external requests. The only JS is an 8-line clipboard helper.</span>
     </div>
     <div class="audit-item">
-      <a href="https://github.com/uSwapExchange/uswap-zero/blob/main/go.mod" class="audit-item__file">go.mod</a>
+      <a href="https://github.com/uSwapExchange/zero/blob/main/go.mod" class="audit-item__file">go.mod</a>
       <span class="audit-item__desc">Zero external dependencies. Only Go standard library. Nothing to supply-chain attack.</span>
     </div>
     <div class="audit-item">
-      <a href="https://github.com/uSwapExchange/uswap-zero/blob/main/Dockerfile" class="audit-item__file">Dockerfile</a>
+      <a href="https://github.com/uSwapExchange/zero/blob/main/Dockerfile" class="audit-item__file">Dockerfile</a>
       <span class="audit-item__desc">FROM scratch — the container is literally empty except for our binary and TLS certificates.</span>
     </div>
   </div>

@@ -37,8 +37,8 @@ Dependencies: 0
 ## Run Locally
 
 ```bash
-git clone https://github.com/uSwapExchange/uswap-zero.git
-cd uswap-zero
+git clone https://github.com/uSwapExchange/zero.git
+cd zero
 
 # Generate a random encryption key and start the server
 ORDER_SECRET=$(openssl rand -hex 32) go run .
@@ -50,11 +50,11 @@ Open http://localhost:3000.
 
 ```bash
 # Binary
-go build -o uswap-zero .
+go build -o zero .
 
 # Docker
-docker build -t uswap-zero .
-docker run -p 3000:3000 uswap-zero
+docker build -t zero .
+docker run -p 3000:3000 zero
 ```
 
 Build with deployment metadata:
@@ -63,8 +63,8 @@ Build with deployment metadata:
 go build -ldflags "-s -w \
   -X main.commitHash=$(git rev-parse HEAD) \
   -X main.buildTime=$(date -u +%Y-%m-%dT%H:%M:%SZ) \
-  -X main.buildLogURL=https://github.com/uSwapExchange/uswap-zero/actions/runs/12345" \
-  -o uswap-zero .
+  -X main.buildLogURL=https://github.com/uSwapExchange/zero/actions/runs/12345" \
+  -o zero .
 ```
 
 ## Environment Variables
@@ -79,7 +79,7 @@ go build -ldflags "-s -w \
 ## Project Structure
 
 ```
-uswap-zero/
+zero/
 ├── main.go           # Server, routes, templates, rate limiter
 ├── handlers.go       # HTTP handlers for all pages
 ├── nearintents.go    # NEAR Intents 1Click API client
@@ -126,13 +126,13 @@ Every deployment's commit hash, image digest, and build log are published at `/v
 
 ```bash
 # Clone and build the same commit
-git clone https://github.com/uSwapExchange/uswap-zero.git
-cd uswap-zero
+git clone https://github.com/uSwapExchange/zero.git
+cd zero
 git checkout <commit-from-verify-page>
-go build -o uswap-zero .
+go build -o zero .
 
 # Or build with Docker (same as production)
-docker build -t uswap-zero .
+docker build -t zero .
 ```
 
 Check `nearintents.go` for zero fee markup. Check `handlers.go` for zero logging. Check `go.mod` for zero dependencies.

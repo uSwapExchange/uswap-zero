@@ -31,7 +31,7 @@
   <p class="footer-powered">Powered by <a href="https://defuse.org/">NEAR Intents</a> (0% commissions)</p>
   <p class="footer-license">Open source. MIT License.</p>
   {{if and .CommitHash (ne .CommitHash "development") (ne .CommitHash "unknown") (ne .CommitHash "")}}
-  <p class="footer-build"><a href="https://github.com/uSwapExchange/uswap-zero/commit/{{.CommitHash}}">{{slice .CommitHash 0 7}}</a>{{if and .BuildTime (ne .BuildTime "unknown")}} &middot; {{.BuildTime}}{{end}}</p>
+  <p class="footer-build"><a href="https://github.com/uSwapExchange/zero/commit/{{.CommitHash}}">{{slice .CommitHash 0 7}}</a>{{if and .BuildTime (ne .BuildTime "unknown")}} &middot; {{.BuildTime}}{{end}}</p>
   {{end}}
 </footer>
 </div>
