@@ -765,7 +765,7 @@ func handleVerify(w http.ResponseWriter, r *http.Request) {
 
 	// Env var status (key names only — never values)
 	envKeys := []string{
-		"ORDER_SECRET", "NEAR_INTENTS_JWT", "NEAR_INTENTS_API_URL", "PORT",
+		"ORDER_SECRET", "NEAR_INTENTS_JWT", "NEAR_INTENTS_EXPLORER_JWT", "NEAR_INTENTS_API_URL", "PORT",
 		"TG_BOT_TOKEN", "TG_APP_URL", "TG_WEBHOOK_SECRET",
 		"TG_MONITOR_GROUP_ID", "TG_MAIN_CHAT_ID",
 		"TG_SWAPMY_THREAD_ID", "TG_EAGLESWAP_THREAD_ID", "TG_LIZARDSWAP_THREAD_ID",

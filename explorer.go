@@ -12,7 +12,10 @@ import (
 
 const explorerBaseURL = "https://explorer.near-intents.org/api"
 
-var explorerClient = &http.Client{Timeout: 30 * time.Second}
+var (
+	explorerClient = &http.Client{Timeout: 30 * time.Second}
+	explorerJWT    string // loaded from NEAR_INTENTS_EXPLORER_JWT
+)
 
 type ExplorerTx struct {
 	DepositAddress           string           `json:"depositAddress"`
@@ -50,8 +53,8 @@ func explorerGet(endpoint string) ([]byte, error) {
 		return nil, err
 	}
 	req.Header.Set("Accept", "application/json")
-	if nearIntentsJWT != "" {
-		req.Header.Set("Authorization", "Bearer "+nearIntentsJWT)
+	if explorerJWT != "" {
+		req.Header.Set("Authorization", "Bearer "+explorerJWT)
 	}
 	resp, err := explorerClient.Do(req)
 	if err != nil {
