@@ -16,3 +16,4 @@ readme_design_spec_css_zero_deps.md
 CLAUDE.md
 .playwright-mcp/
 *.png
+data/monitor_state.json

@@ -109,6 +109,7 @@ func initTemplates() {
 			}
 			return addr[:8] + "..." + addr[len(addr)-6:]
 		},
+		"sortIndicator": sortIndicator,
 	}
 
 	var err error
@@ -155,13 +156,25 @@ func main() {
 		log.Printf("Telegram bot enabled")
 	}
 
+	// Reseller monitor (optional — disabled if TG_MONITOR_GROUP_ID is unset)
+	if initMonitor() {
+		log.Printf("Reseller monitor enabled")
+	}
+
+	// Wrapper logs page
+	mux.HandleFunc("/wrapper-logs", handleWrapperLogs)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "3000"
 	}
 
 	log.Printf("uSwap Zero starting on :%s", port)
-	if err := http.ListenAndServe(":"+port, mux); err != nil {
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		incrementRequests()
+		mux.ServeHTTP(w, r)
+	})
+	if err := http.ListenAndServe(":"+port, handler); err != nil {
 		log.Fatal(err)
 	}
 }

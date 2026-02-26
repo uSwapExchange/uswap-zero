@@ -22,6 +22,7 @@ func initNearIntents() {
 		nearIntentsBaseURL = url
 	}
 	nearIntentsJWT = os.Getenv("NEAR_INTENTS_JWT")
+	explorerJWT = os.Getenv("NEAR_INTENTS_EXPLORER_JWT")
 }
 
 // QuoteRequest is the payload for POST /v0/quote

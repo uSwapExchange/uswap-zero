@@ -6,7 +6,10 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"os"
+	"runtime/debug"
 	"strings"
+	"sync/atomic"
 	"time"
 )
 
@@ -721,10 +724,67 @@ func handleCaseStudy(w http.ResponseWriter, r *http.Request) {
 	templates.ExecuteTemplate(w, "case_study.html", data)
 }
 
+// VerifyPageData is the data for the /verify page.
+type VerifyPageData struct {
+	PageData
+	GoVersion   string
+	Uptime      string
+	Requests    string
+	BinarySize  string
+	EnvVars     []EnvVarStatus
+}
+
+// EnvVarStatus shows whether an env var is configured.
+type EnvVarStatus struct {
+	Key   string
+	Set   bool
+}
+
 // handleVerify renders the deployment verification page.
 func handleVerify(w http.ResponseWriter, r *http.Request) {
+	// Go version from build info
+	goVersion := "unknown"
+	if info, ok := debug.ReadBuildInfo(); ok {
+		goVersion = info.GoVersion
+	}
+
+	// Uptime
+	uptime := time.Since(serverStartTime).Round(time.Second).String()
+
+	// Request count
+	reqs := formatCommas(atomic.LoadInt64(&requestCounter))
+
+	// Binary size
+	binSize := "unknown"
+	if exe, err := os.Executable(); err == nil {
+		if fi, err := os.Stat(exe); err == nil {
+			mb := float64(fi.Size()) / 1024 / 1024
+			binSize = fmt.Sprintf("%.1f MB", mb)
+		}
+	}
+
+	// Env var status (key names only — never values)
+	envKeys := []string{
+		"ORDER_SECRET", "NEAR_INTENTS_JWT", "NEAR_INTENTS_EXPLORER_JWT", "NEAR_INTENTS_API_URL", "PORT",
+		"TG_BOT_TOKEN", "TG_APP_URL", "TG_WEBHOOK_SECRET",
+		"TG_MONITOR_GROUP_ID", "TG_MAIN_CHAT_ID",
+		"TG_SWAPMY_THREAD_ID", "TG_EAGLESWAP_THREAD_ID", "TG_LIZARDSWAP_THREAD_ID",
+	}
+	var envVars []EnvVarStatus
+	for _, k := range envKeys {
+		envVars = append(envVars, EnvVarStatus{Key: k, Set: os.Getenv(k) != ""})
+	}
+
+	data := VerifyPageData{
+		PageData:  newPageData("Verify"),
+		GoVersion: goVersion,
+		Uptime:    uptime,
+		Requests:  reqs,
+		BinarySize: binSize,
+		EnvVars:   envVars,
+	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	templates.ExecuteTemplate(w, "verify.html", newPageData("Verify"))
+	templates.ExecuteTemplate(w, "verify.html", data)
 }
 
 // handleGenIcon serves dynamically generated token icon SVGs.
