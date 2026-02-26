@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -130,6 +132,7 @@ func initMonitor() bool {
 	monitorStats["Gcj5A3a5mF2BEPm4LujddTit7tTR8pNmUKXkcuzM4dC1"] = &LiveStats{FeeUSD: raw.EagleSwap.TotalRevenueUSD, VolumeUSD: raw.EagleSwap.TotalVolumeUSD, SwapCount: raw.EagleSwap.TotalSwaps}
 	monitorStats["trustswap.near"] = &LiveStats{FeeUSD: raw.LizardSwap.TotalRevenueUSD, VolumeUSD: raw.LizardSwap.TotalVolumeUSD, SwapCount: raw.LizardSwap.TotalSwaps}
 
+	initExplorerRateLimiter()
 	monitorEnabled = true
 	go runMonitor(groupID)
 	return true
@@ -158,6 +161,7 @@ func runResellerPoller(groupID int64, r monitorReseller, cursors cursorFile) {
 
 		for _, tx := range txs {
 			fee := txFeeUSD(tx)
+			inUsd, _ := strconv.ParseFloat(strings.TrimSpace(tx.AmountInUsd), 64)
 
 			monitorLogBuf.add(LogEntry{
 				Reseller:  r.Name,
@@ -167,7 +171,7 @@ func runResellerPoller(groupID int64, r monitorReseller, cursors cursorFile) {
 				PostedAt:  time.Now(),
 			})
 
-			monitorStats[r.Affiliate].add(fee, tx.AmountInUsd)
+			monitorStats[r.Affiliate].add(fee, inUsd)
 
 			if r.ThreadID != 0 && tgBotToken != "" {
 				postMonitorCard(groupID, r.ThreadID, r.Name, tx, fee, monitorStats[r.Affiliate])

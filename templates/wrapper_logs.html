@@ -10,21 +10,27 @@
   </div>
 
   <!-- Totals -->
-  <div class="stats-grid">
-    {{range .Resellers}}
-    <div class="stat-card stat-card--accent">
-      <div class="stat-card__value">{{.FeeUSD}}</div>
-      <div class="stat-card__label">{{.Name}} Profit</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card__value">{{.Swaps}}</div>
-      <div class="stat-card__label">{{.Name}} Swaps</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card__value">{{.VolumeUSD}}</div>
-      <div class="stat-card__label">{{.Name}} Volume</div>
-    </div>
-    {{end}}
+  <div style="overflow-x:auto;margin-bottom:24px;">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Reseller</th>
+          <th>Profit Taken</th>
+          <th>Swaps</th>
+          <th>Volume</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .Resellers}}
+        <tr>
+          <td><strong>{{.Name}}</strong></td>
+          <td class="text-accent"><strong>{{.FeeUSD}}</strong></td>
+          <td>{{.Swaps}}</td>
+          <td>{{.VolumeUSD}}</td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
   </div>
 
   <!-- Search & Filter -->

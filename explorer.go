@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -13,10 +14,30 @@ import (
 const explorerBaseURL = "https://explorer.near-intents.org/api"
 
 var (
-	explorerClient = &http.Client{Timeout: 30 * time.Second}
-	explorerJWT    string // loaded from NEAR_INTENTS_EXPLORER_JWT
+	explorerClient      = &http.Client{Timeout: 30 * time.Second}
+	explorerJWT         string       // loaded from NEAR_INTENTS_EXPLORER_JWT
+	explorerRateCh      chan struct{} // nil until initExplorerRateLimiter called
 )
 
+// initExplorerRateLimiter starts a ticker that emits one token every 6 seconds.
+// All explorerGet calls block on this channel, ensuring we never exceed the
+// Explorer API rate limit of 1 request per 5 seconds per partner ID.
+func initExplorerRateLimiter() {
+	explorerRateCh = make(chan struct{}, 1)
+	explorerRateCh <- struct{}{} // first call can proceed immediately
+	go func() {
+		t := time.NewTicker(6 * time.Second)
+		for range t.C {
+			select {
+			case explorerRateCh <- struct{}{}:
+			default: // channel full — no backlog needed
+			}
+		}
+	}()
+}
+
+// ExplorerTx is a single transaction from the NEAR Intents Explorer API.
+// Note: amountInUsd and amountOutUsd are returned as JSON strings by the API.
 type ExplorerTx struct {
 	DepositAddress           string           `json:"depositAddress"`
 	DepositMemo              string           `json:"depositMemo"`
@@ -24,8 +45,8 @@ type ExplorerTx struct {
 	Status                   string           `json:"status"`
 	AmountInFormatted        string           `json:"amountInFormatted"`
 	AmountOutFormatted       string           `json:"amountOutFormatted"`
-	AmountInUsd              float64          `json:"amountInUsd"`
-	AmountOutUsd             float64          `json:"amountOutUsd"`
+	AmountInUsd              string           `json:"amountInUsd"`  // JSON string e.g. "1198.27"
+	AmountOutUsd             string           `json:"amountOutUsd"` // JSON string
 	OriginAsset              string           `json:"originAsset"`
 	DestinationAsset         string           `json:"destinationAsset"`
 	Senders                  []string         `json:"senders"`
@@ -42,12 +63,14 @@ type ExplorerAppFee struct {
 	Fee       int    `json:"fee"` // basis points
 }
 
-type explorerPageResp struct {
-	Transactions []ExplorerTx `json:"transactions"`
-}
-
-// explorerGet makes a JWT-authenticated GET to the Explorer API.
+// explorerGet makes a rate-limited, JWT-authenticated GET to the Explorer API.
+// The response is the raw JSON body.
 func explorerGet(endpoint string) ([]byte, error) {
+	// Throttle: max 1 request per 6 seconds globally across all callers.
+	if explorerRateCh != nil {
+		<-explorerRateCh
+	}
+
 	req, err := http.NewRequest("GET", explorerBaseURL+endpoint, nil)
 	if err != nil {
 		return nil, err
@@ -72,7 +95,8 @@ func explorerGet(endpoint string) ([]byte, error) {
 }
 
 // fetchExplorerTxs returns up to count SUCCESS txs for an affiliate.
-// lastAddr/lastMemo are cursor tokens; empty = start from oldest.
+// lastAddr/lastMemo are cursor tokens; empty = start from beginning.
+// The Explorer API returns a bare JSON array (not an object wrapper).
 func fetchExplorerTxs(affiliate, lastAddr, lastMemo string, count int) ([]ExplorerTx, error) {
 	q := url.Values{}
 	q.Set("affiliate", affiliate)
@@ -89,23 +113,28 @@ func fetchExplorerTxs(affiliate, lastAddr, lastMemo string, count int) ([]Explor
 	if err != nil {
 		return nil, err
 	}
-	var r explorerPageResp
-	if err := json.Unmarshal(data, &r); err != nil {
+	var txs []ExplorerTx
+	if err := json.Unmarshal(data, &txs); err != nil {
 		return nil, err
 	}
-	return r.Transactions, nil
+	return txs, nil
 }
 
 // txFeeUSD computes the USD fee taken from a transaction via appFees.
+// amountInUsd is a JSON string from the API and parsed here.
 func txFeeUSD(tx ExplorerTx) float64 {
 	var bps int
 	for _, f := range tx.AppFees {
 		bps += f.Fee
 	}
-	if bps == 0 || tx.AmountInUsd == 0 {
+	if bps == 0 {
 		return 0
 	}
-	return tx.AmountInUsd * float64(bps) / 10000.0
+	inUsd, err := strconv.ParseFloat(strings.TrimSpace(tx.AmountInUsd), 64)
+	if err != nil || inUsd == 0 {
+		return 0
+	}
+	return inUsd * float64(bps) / 10000.0
 }
 
 // txTokenLabel returns the token symbol for a defuse asset ID.
