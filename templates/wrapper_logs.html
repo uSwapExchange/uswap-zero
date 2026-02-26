@@ -1,0 +1,88 @@
+{{template "head" .}}
+<div class="page-content page-content--wide">
+  <meta http-equiv="refresh" content="60">
+
+  <a href="/" class="back-link">&larr; Start Swapping</a>
+
+  <div class="article-header">
+    <h1>Wrapper Logs</h1>
+    <p>Live feed of every swap routed through Swap.my, LizardSwap, and EagleSwap — with the fee they extracted from users, pulled directly from the NEAR Intents Explorer API.</p>
+    {{if not .MonitorActive}}<p class="text-muted" style="font-size:0.82rem;">Monitor not running — start the server with TG_MONITOR_GROUP_ID set to enable live tracking.</p>{{end}}
+  </div>
+
+  <!-- Totals -->
+  <div class="stats-grid">
+    {{range .Resellers}}
+    <div class="stat-card stat-card--accent">
+      <div class="stat-card__value">{{.FeeUSD}}</div>
+      <div class="stat-card__label">{{.Name}} Profit</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__value">{{.Swaps}}</div>
+      <div class="stat-card__label">{{.Name}} Swaps</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__value">{{.VolumeUSD}}</div>
+      <div class="stat-card__label">{{.Name}} Volume</div>
+    </div>
+    {{end}}
+  </div>
+
+  <!-- Search & Filter -->
+  <div class="audit-section">
+    <form method="get" action="/wrapper-logs" class="modal-search-form" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px;">
+      <input type="text" name="q" value="{{.Query}}" placeholder="Search address, token, hash…" class="modal-search-input" style="flex:1;min-width:200px;">
+      <select name="reseller" class="form-input" style="width:auto;">
+        <option value="">All Resellers</option>
+        {{range .Resellers}}
+        <option value="{{.Name}}" {{if eq $.FilterReseller .Name}}selected{{end}}>{{.Name}}</option>
+        {{end}}
+      </select>
+      <button type="submit" class="btn btn--primary">Filter</button>
+      {{if or .Query .FilterReseller}}<a href="/wrapper-logs" class="btn">Clear</a>{{end}}
+    </form>
+    <p class="text-muted" style="font-size:0.82rem;">Showing {{.Count}} entries (newest first). Auto-refreshes every 60s.</p>
+  </div>
+
+  <!-- Log Table -->
+  {{if .Entries}}
+  <div style="overflow-x:auto;">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Reseller</th>
+          <th>Sent</th>
+          <th>Received</th>
+          <th>Fee Taken</th>
+          <th>Time (UTC)</th>
+          <th>NEAR TX</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .Entries}}
+        <tr>
+          <td><strong>{{.Reseller}}</strong></td>
+          <td>{{.AmountIn}} {{.TokenIn}}<br><span class="text-muted" style="font-size:0.75rem;">{{.ChainIn}}</span></td>
+          <td>{{.AmountOut}} {{.TokenOut}}<br><span class="text-muted" style="font-size:0.75rem;">{{.ChainOut}}</span></td>
+          <td class="text-accent"><strong>{{.FeeUSD}}</strong></td>
+          <td style="white-space:nowrap;">{{.Timestamp}}</td>
+          <td>
+            {{if .NearTxHash}}
+            <a href="{{.NearTxURL}}" target="_blank" rel="noopener" class="text-accent" style="font-family:monospace;font-size:0.75rem;">{{slice .NearTxHash 0 12}}…</a>
+            {{else}}&mdash;{{end}}
+          </td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+  {{else}}
+  <p class="text-center text-muted mt-24">No entries yet — backfill in progress or monitor not running.</p>
+  {{end}}
+
+  <div class="text-center mt-32" style="font-size:0.82rem;color:var(--text-muted);">
+    Data sourced from <a href="https://explorer.near-intents.org" class="text-accent" target="_blank" rel="noopener">NEAR Intents Explorer API</a> · <a href="/case-study" class="text-accent">Case Study</a>
+  </div>
+
+</div>
+{{template "footer" .}}

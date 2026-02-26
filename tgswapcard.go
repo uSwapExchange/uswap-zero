@@ -61,7 +61,26 @@ func buildAppURL(sess *tgSession) string {
 
 // renderSwapCard builds the swap card text and inline keyboard.
 func renderSwapCard(sess *tgSession) (string, *TGInlineKeyboardMarkup) {
-	text := "<pre>" + renderSwapCardMono(sess) + "</pre>"
+	var sb strings.Builder
+
+	// Live counter line — only shown when monitor is running
+	if total := monitorTotalFeeUSD(); total > 0 {
+		sb.WriteString("Don't be a part of the " + formatUSD(total) + " taken.\n\n")
+	}
+
+	sb.WriteString("<pre>" + renderSwapCardMono(sess) + "</pre>")
+
+	// Footer links
+	sb.WriteString("\n\n")
+	if commitHash != "development" && commitHash != "unknown" && commitHash != "" {
+		sb.WriteString("<a href=\"https://github.com/uSwapExchange/zero/commit/" + commitHash + "\">[Commit]</a> · ")
+	}
+	sb.WriteString("<a href=\"https://github.com/uSwapExchange/zero\">[Source Code]</a>")
+	if buildLogURL != "" && buildLogURL != "unknown" {
+		sb.WriteString(" · <a href=\"" + buildLogURL + "\">[Build Log]</a>")
+	}
+
+	text := sb.String()
 
 	fromLabel := tokenLabel(sess.FromTicker, sess.FromNet)
 	toLabel := tokenLabel(sess.ToTicker, sess.ToNet)

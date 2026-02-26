@@ -17,7 +17,7 @@
         {{if or (eq .CommitHash "development") (eq .CommitHash "unknown") (eq .CommitHash "")}}
           <span class="text-muted">development (local build)</span>
         {{else}}
-          <a href="https://github.com/uSwapExchange/zero/commit/{{.CommitHash}}">{{slice .CommitHash 0 12}}</a>
+          <a href="https://github.com/uSwapExchange/zero/commit/{{.CommitHash}}"><code>{{.CommitHash}}</code></a>
         {{end}}
       </span>
     </div>
@@ -35,6 +35,36 @@
     <div class="metadata-row">
       <span class="metadata-row__label">CI Build Log</span>
       <span class="metadata-row__value"><a href="{{.BuildLogURL}}">View Build Log &rarr;</a></span>
+    </div>
+    {{end}}
+    <div class="metadata-row">
+      <span class="metadata-row__label">Go Version</span>
+      <span class="metadata-row__value"><code>{{.GoVersion}}</code></span>
+    </div>
+    <div class="metadata-row">
+      <span class="metadata-row__label">Binary Size</span>
+      <span class="metadata-row__value">{{.BinarySize}}</span>
+    </div>
+    <div class="metadata-row">
+      <span class="metadata-row__label">Uptime</span>
+      <span class="metadata-row__value">{{.Uptime}}</span>
+    </div>
+    <div class="metadata-row">
+      <span class="metadata-row__label">Requests Served</span>
+      <span class="metadata-row__value">{{.Requests}}</span>
+    </div>
+  </div>
+
+  <!-- Environment Config -->
+  <div class="metadata-card">
+    <div class="metadata-card__title">Environment Configuration</div>
+    <p style="font-size:0.78rem;color:var(--text-muted);margin:0 0 12px;">Which env vars are configured on this deployment. Values are never shown.</p>
+    {{range .EnvVars}}
+    <div class="metadata-row">
+      <span class="metadata-row__label"><code>{{.Key}}</code></span>
+      <span class="metadata-row__value">
+        {{if .Set}}<span style="color:var(--accent);">&#10003; set</span>{{else}}<span class="text-muted">not set</span>{{end}}
+      </span>
     </div>
     {{end}}
   </div>
