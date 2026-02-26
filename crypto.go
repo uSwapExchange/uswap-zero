@@ -49,6 +49,8 @@ type OrderData struct {
 	AmountOut   string `json:"ao"`
 	Deadline    string `json:"dl"`
 	CorrID      string `json:"c"`
+	RefundAddr  string `json:"ra,omitempty"`
+	RecvAddr    string `json:"rca,omitempty"`
 }
 
 // encryptOrderData encrypts order data into a base64url token.

@@ -12,3 +12,7 @@ uswap-zero.exe
 .DS_Store
 Thumbs.db
 readme_design_spec_css_zero_deps.md
+.claude/
+CLAUDE.md
+.playwright-mcp/
+*.png

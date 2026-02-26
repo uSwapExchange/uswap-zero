@@ -103,6 +103,12 @@ func initTemplates() {
 			}
 			return s
 		},
+		"truncAddr": func(addr string) string {
+			if len(addr) <= 16 {
+				return addr
+			}
+			return addr[:8] + "..." + addr[len(addr)-6:]
+		},
 	}
 
 	var err error
@@ -141,6 +147,13 @@ func main() {
 	mux.HandleFunc("/source", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "https://github.com/uSwapExchange/zero", http.StatusFound)
 	})
+
+	// Telegram bot (optional — disabled if TG_BOT_TOKEN is unset)
+	if initTelegramBot() {
+		mux.HandleFunc("/tg/webhook/"+tgWebhookSecret, handleTelegramWebhook)
+		tgSessions.startCleanup()
+		log.Printf("Telegram bot enabled")
+	}
 
 	port := os.Getenv("PORT")
 	if port == "" {

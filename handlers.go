@@ -430,8 +430,6 @@ func handleSwapConfirm(w http.ResponseWriter, r *http.Request) {
 	recipient := r.FormValue("recipient")
 	refundAddr := r.FormValue("refund_addr")
 	slippageBPS := r.FormValue("slippage_bps")
-	amountIn := r.FormValue("amount_in")
-	amountOut := r.FormValue("amount_out")
 
 	fromToken := findToken(fromTicker, fromNet)
 	toToken := findToken(toTicker, toNet)
@@ -458,7 +456,7 @@ func handleSwapConfirm(w http.ResponseWriter, r *http.Request) {
 		RecipientType:      "DESTINATION_CHAIN",
 		Deadline:           buildDeadline(time.Hour),
 		Referral:           "uswap-zero",
-		QuoteWaitingTimeMs: 3000,
+		QuoteWaitingTimeMs: 8000,
 		AppFees:            []struct{}{},
 	}
 
@@ -468,7 +466,7 @@ func handleSwapConfirm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Encrypt order data into token
+	// Encrypt order data into token — use API's canonical formatted amounts.
 	orderData := &OrderData{
 		DepositAddr: quoteResp.Quote.DepositAddress,
 		Memo:        quoteResp.Quote.DepositMemo,
@@ -476,10 +474,12 @@ func handleSwapConfirm(w http.ResponseWriter, r *http.Request) {
 		FromNet:     fromNet,
 		ToTicker:    toTicker,
 		ToNet:       toNet,
-		AmountIn:    amountIn,
-		AmountOut:   amountOut,
+		AmountIn:    quoteResp.Quote.AmountInFmt,
+		AmountOut:   quoteResp.Quote.AmountOutFmt,
 		Deadline:    quoteResp.Quote.Deadline,
 		CorrID:      quoteResp.CorrelationID,
+		RefundAddr:  refundAddr,
+		RecvAddr:    recipient,
 	}
 
 	token, err := encryptOrderData(orderData)
@@ -512,7 +512,7 @@ func handleOrder(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Fetch live status from NEAR Intents
-	status, err := fetchStatus(order.DepositAddr)
+	status, err := fetchStatus(order.DepositAddr, order.Memo)
 	if err != nil {
 		// If API is down, still show what we know from the token
 		status = &StatusResponse{Status: "UNKNOWN"}

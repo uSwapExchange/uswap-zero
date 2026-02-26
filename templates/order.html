@@ -88,6 +88,18 @@
       <span class="transparency-row__value">{{.Order.CorrID}}</span>
     </div>
     {{end}}
+    {{if .Order.RefundAddr}}
+    <div class="transparency-row">
+      <span class="transparency-row__label">Refund To</span>
+      <span class="transparency-row__value">{{.Order.RefundAddr | truncAddr}}</span>
+    </div>
+    {{end}}
+    {{if .Order.RecvAddr}}
+    <div class="transparency-row">
+      <span class="transparency-row__label">Receive At</span>
+      <span class="transparency-row__value">{{.Order.RecvAddr | truncAddr}}</span>
+    </div>
+    {{end}}
     <div class="transparency-row">
       <span class="transparency-row__label">Status</span>
       <span class="transparency-row__value">{{.Status.Status}}</span>

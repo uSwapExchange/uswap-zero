@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"time"
 )
@@ -122,43 +123,63 @@ type TokenInfo struct {
 }
 
 // nearRequest makes an authenticated request to the NEAR Intents API.
+// On 5xx responses it retries once after a short delay.
 func nearRequest(method, path string, body interface{}) ([]byte, error) {
-	var bodyReader io.Reader
+	var bodyBytes []byte
 	if body != nil {
 		b, err := json.Marshal(body)
 		if err != nil {
 			return nil, fmt.Errorf("marshal request: %w", err)
 		}
-		bodyReader = bytes.NewReader(b)
+		bodyBytes = b
 	}
 
-	req, err := http.NewRequest(method, nearIntentsBaseURL+path, bodyReader)
-	if err != nil {
-		return nil, fmt.Errorf("create request: %w", err)
+	const maxAttempts = 2
+	for attempt := 0; attempt < maxAttempts; attempt++ {
+		var bodyReader io.Reader
+		if bodyBytes != nil {
+			bodyReader = bytes.NewReader(bodyBytes)
+		}
+
+		req, err := http.NewRequest(method, nearIntentsBaseURL+path, bodyReader)
+		if err != nil {
+			return nil, fmt.Errorf("create request: %w", err)
+		}
+
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Accept", "application/json")
+		if nearIntentsJWT != "" {
+			req.Header.Set("Authorization", "Bearer "+nearIntentsJWT)
+		}
+
+		resp, err := nearHTTPClient.Do(req)
+		if err != nil {
+			if attempt < maxAttempts-1 {
+				time.Sleep(2 * time.Second)
+				continue
+			}
+			return nil, fmt.Errorf("request failed: %w", err)
+		}
+
+		data, err := io.ReadAll(resp.Body)
+		resp.Body.Close()
+		if err != nil {
+			return nil, fmt.Errorf("read response: %w", err)
+		}
+
+		if resp.StatusCode >= 500 && attempt < maxAttempts-1 {
+			time.Sleep(2 * time.Second)
+			continue
+		}
+
+		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+			return nil, fmt.Errorf("API error %d: %s", resp.StatusCode, string(data))
+		}
+
+		return data, nil
 	}
 
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Accept", "application/json")
-	if nearIntentsJWT != "" {
-		req.Header.Set("Authorization", "Bearer "+nearIntentsJWT)
-	}
-
-	resp, err := nearHTTPClient.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("request failed: %w", err)
-	}
-	defer resp.Body.Close()
-
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("read response: %w", err)
-	}
-
-	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, fmt.Errorf("API error %d: %s", resp.StatusCode, string(data))
-	}
-
-	return data, nil
+	return nil, fmt.Errorf("request failed after %d attempts", maxAttempts)
 }
 
 // fetchTokens retrieves the supported token list from NEAR Intents.
@@ -215,8 +236,13 @@ func requestQuote(req *QuoteRequest) (*QuoteResponse, error) {
 }
 
 // fetchStatus checks the status of a swap by deposit address.
-func fetchStatus(depositAddress string) (*StatusResponse, error) {
-	data, err := nearRequest("GET", "/v0/status?depositAddress="+depositAddress, nil)
+// depositMemo is optional but required for chains that use memos (TON, XRP, NEAR, Stellar).
+func fetchStatus(depositAddress, depositMemo string) (*StatusResponse, error) {
+	q := url.Values{"depositAddress": {depositAddress}}
+	if depositMemo != "" {
+		q.Set("depositMemo", depositMemo)
+	}
+	data, err := nearRequest("GET", "/v0/status?"+q.Encode(), nil)
 	if err != nil {
 		return nil, err
 	}

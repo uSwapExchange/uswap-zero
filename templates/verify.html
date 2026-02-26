@@ -64,7 +64,7 @@ ORDER_SECRET=$(openssl rand -hex 32) ./zero</code></pre>
   <!-- What to Audit -->
   <div class="audit-section">
     <h2>WHAT TO AUDIT</h2>
-    <p class="text-muted mb-16" style="font-size:0.82rem;">The entire application is ~1200 lines of Go across 8 files. Here's what to look for:</p>
+    <p class="text-muted mb-16" style="font-size:0.82rem;">The entire application is ~4000 lines of Go across 15 files — web UI and Telegram bot combined. Zero external dependencies. Here's what to look for:</p>
 
     <div class="audit-item">
       <a href="https://github.com/uSwapExchange/zero/blob/main/nearintents.go" class="audit-item__file">nearintents.go</a>
@@ -97,6 +97,18 @@ ORDER_SECRET=$(openssl rand -hex 32) ./zero</code></pre>
     <div class="audit-item">
       <a href="https://github.com/uSwapExchange/zero/blob/main/Dockerfile" class="audit-item__file">Dockerfile</a>
       <span class="audit-item__desc">FROM scratch — the container is literally empty except for our binary and TLS certificates.</span>
+    </div>
+    <div class="audit-item">
+      <a href="https://github.com/uSwapExchange/zero/blob/main/tgorder.go" class="audit-item__file">tgorder.go</a>
+      <span class="audit-item__desc">Telegram swap flow. No user data written to disk or database. Orders are encrypted into URL tokens — same model as the web UI, nothing stored server-side.</span>
+    </div>
+    <div class="audit-item">
+      <a href="https://github.com/uSwapExchange/zero/blob/main/tgrender.go" class="audit-item__file">tgrender.go</a>
+      <span class="audit-item__desc">All Telegram cards are monospace &lt;pre&gt; blocks — no external image services, no CDN, no third-party calls. QR codes generated server-side in pure Go stdlib.</span>
+    </div>
+    <div class="audit-item">
+      <a href="https://github.com/uSwapExchange/zero/blob/main/tgsession.go" class="audit-item__file">tgsession.go</a>
+      <span class="audit-item__desc">Telegram session state lives in memory only, scoped to the bot process. Nothing is persisted between restarts. No database, no file writes.</span>
     </div>
   </div>
 

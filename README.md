@@ -6,7 +6,7 @@ Zero-fee, zero-tracking, open-source crypto swap frontend powered by [NEAR Inten
 
 ## What is this?
 
-A single Go binary (~2000 lines, zero dependencies) that lets you swap 140+ tokens across 29 blockchains. No account needed. No JavaScript analytics. No cookies. No server-side logging of user data.
+A single Go binary (~4000 lines, zero dependencies) that lets you swap 140+ tokens across 29 blockchains — via web or Telegram bot. No account needed. No JavaScript analytics. No cookies. No server-side logging of user data.
 
 uSwap Zero passes the NEAR Intents exchange rate through at cost — no markup, no hidden fees. Every swap is verifiable against the public NEAR Intents API.
 
@@ -46,6 +46,14 @@ ORDER_SECRET=$(openssl rand -hex 32) go run .
 
 Open http://localhost:3000.
 
+## Telegram Bot
+
+The bot is optional. When `TG_BOT_TOKEN` and `TG_APP_URL` are set, the server auto-registers a webhook and the bot becomes active. If either is unset, the web interface still works normally.
+
+The bot renders everything as monospace `<pre>` cards — no images, no external services. QR codes for deposit addresses are generated server-side (stdlib only) and sent as photo messages with a dark frame.
+
+Try it: [@uSwapZero_Bot](https://t.me/uSwapZero_Bot)
+
 ## Build
 
 ```bash
@@ -75,6 +83,11 @@ go build -ldflags "-s -w \
 | `NEAR_INTENTS_JWT` | No | Empty | JWT from NEAR Intents partners portal (enables 0% protocol fee) |
 | `NEAR_INTENTS_API_URL` | No | `https://1click.chaindefuser.com` | NEAR Intents API base URL |
 | `PORT` | No | `3000` | HTTP listen port |
+| `TG_BOT_TOKEN` | No | — | Telegram bot token from @BotFather — enables the Telegram bot |
+| `TG_APP_URL` | No | — | Public base URL of the deployment (e.g. `https://zero.uswap.net`) |
+| `TG_WEBHOOK_SECRET` | No | Auto-generated | Secret for verifying Telegram webhook requests |
+
+See `.env.example` for a complete reference.
 
 ## Project Structure
 
@@ -87,6 +100,13 @@ zero/
 ├── crypto.go         # AES-256-GCM encrypt/decrypt + CSRF tokens
 ├── qr.go             # QR code SVG generator (hand-rolled, no deps)
 ├── amount.go         # BigInt amount math (human <-> atomic)
+├── tgbot.go          # Telegram bot init, webhook registration
+├── tghandler.go      # Telegram update router + command handlers
+├── tgorder.go        # Telegram swap flow (quote → confirm → order → status)
+├── tgrender.go       # Monospace card renderers (<pre> box-drawing)
+├── tgqr.go           # Dark-framed QR PNG generator for deposit step
+├── tgsession.go      # Per-user session state
+├── tgswapcard.go     # Swap card builder + inline keyboard
 ├── templates/        # Go html/template files
 ├── static/style.css  # Single stylesheet
 ├── static/icons/     # 30 bundled SVG crypto icons
