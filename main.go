@@ -19,6 +19,9 @@ var (
 	buildLogURL = ""
 )
 
+// onionURL is the .onion address for this deployment, set via ONION_URL env var.
+var onionURL = os.Getenv("ONION_URL")
+
 //go:embed templates/*
 var templateFS embed.FS
 

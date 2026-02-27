@@ -68,6 +68,7 @@ type PageData struct {
 	CommitHash  string
 	BuildTime   string
 	BuildLogURL string
+	OnionURL    string
 }
 
 func newPageData(title string) PageData {
@@ -80,6 +81,7 @@ func newPageData(title string) PageData {
 		CommitHash:  commitHash,
 		BuildTime:   buildTime,
 		BuildLogURL: buildLogURL,
+		OnionURL:    onionURL,
 	}
 }
 

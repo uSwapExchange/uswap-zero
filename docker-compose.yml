@@ -1,0 +1,21 @@
+services:
+  zero:
+    image: ghcr.io/uswapexchange/zero:latest
+    restart: unless-stopped
+    env_file: .env
+    networks:
+      - internal
+
+  tor:
+    build: ./tor
+    restart: unless-stopped
+    volumes:
+      - ./tor/hidden_service:/var/lib/tor/hidden_service
+    networks:
+      - internal
+    depends_on:
+      - zero
+
+networks:
+  internal:
+    driver: bridge

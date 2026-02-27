@@ -1,0 +1,3 @@
+SocksPort 0
+HiddenServiceDir /var/lib/tor/hidden_service
+HiddenServicePort 80 zero:3000

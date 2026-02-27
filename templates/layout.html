@@ -32,6 +32,7 @@
     <span class="footer-dot">&middot;</span>
     <a href="/wrapper-logs">Wrapper Logs</a>
   </nav>
+  {{if .OnionURL}}<p class="footer-onion">Also on Tor: <a href="{{.OnionURL}}">{{.OnionURL}}</a></p>{{end}}
   <p class="footer-powered">Powered by <a href="https://defuse.org/">NEAR Intents</a> (0% commissions)</p>
   <p class="footer-license">Open source. MIT License.</p>
   {{if and .CommitHash (ne .CommitHash "development") (ne .CommitHash "unknown") (ne .CommitHash "")}}
