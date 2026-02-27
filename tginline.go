@@ -118,7 +118,7 @@ func estimateOutputForTokens(from, to TokenInfo, amountStr string) (outAmt, outU
 	}
 	valueUSD := amountF * from.Price
 	output := valueUSD / to.Price
-	return fmtEstimate(output), fmt.Sprintf("~$%.2f", valueUSD)
+	return fmtEstimate(output), "~$" + fmtEstimate(valueUSD)
 }
 
 // buildEmptyResults returns results for an empty inline query (@botname with no text).
@@ -481,12 +481,30 @@ func parseSwapStartParam(sess *tgSession, param string) {
 	}
 }
 
-// fmtEstimate formats a float as a concise decimal string, trimming trailing zeros.
+// fmtEstimate formats a float with magnitude-aware precision (≤4 significant figures),
+// trimming trailing zeros. Keeps descriptions single-line.
 func fmtEstimate(f float64) string {
 	if f == 0 {
 		return "0"
 	}
-	s := strconv.FormatFloat(f, 'f', 8, 64)
+	var prec int
+	switch {
+	case f >= 10000:
+		prec = 0
+	case f >= 1000:
+		prec = 1
+	case f >= 100:
+		prec = 2
+	case f >= 10:
+		prec = 3
+	case f >= 1:
+		prec = 4
+	case f >= 0.01:
+		prec = 5
+	default:
+		prec = 6
+	}
+	s := strconv.FormatFloat(f, 'f', prec, 64)
 	if strings.Contains(s, ".") {
 		s = strings.TrimRight(s, "0")
 		s = strings.TrimRight(s, ".")
