@@ -16,4 +16,16 @@ else
     echo "Tor: no key provided — Tor will generate a fresh address"
 fi
 
+# Allow overriding the backend address via env var (useful when tor and the
+# app are on different Docker/Coolify networks and "zero" does not resolve).
+BACKEND="${TOR_BACKEND:-zero:3000}"
+echo "Tor: backend set to $BACKEND"
+
+# Rewrite torrc with the resolved backend address at runtime.
+cat > /etc/tor/torrc <<EOF
+SocksPort 0
+HiddenServiceDir /var/lib/tor/hidden_service
+HiddenServicePort 80 ${BACKEND}
+EOF
+
 exec tor -f /etc/tor/torrc
