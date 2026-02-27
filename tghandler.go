@@ -31,6 +31,10 @@ func handleTelegramWebhook(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 	// Route to handler
+	if update.InlineQuery != nil {
+		go handleTGInlineQuery(update.InlineQuery)
+		return
+	}
 	if update.CallbackQuery != nil {
 		go handleTGCallback(update.CallbackQuery)
 		return
@@ -56,7 +60,11 @@ func handleTGMessage(msg *TGMessage) {
 		cmd := strings.SplitN(text, " ", 2)
 		switch strings.ToLower(strings.TrimSuffix(cmd[0], "@"+botUsername())) {
 		case "/start":
-			handleTGStart(chatID)
+			startParam := ""
+			if len(cmd) > 1 {
+				startParam = strings.TrimSpace(cmd[1])
+			}
+			handleTGStart(chatID, startParam)
 		case "/verify":
 			handleTGVerify(chatID)
 		case "/status":
@@ -170,7 +178,8 @@ func handleTGCallback(cb *TGCallbackQuery) {
 }
 
 // handleTGStart sends the welcome message and swap card.
-func handleTGStart(chatID int64) {
+// startParam may contain a deep-link pre-fill (e.g. "swap_BTC-btc_ETH-eth_0.5").
+func handleTGStart(chatID int64, startParam string) {
 	sess := tgSessions.get(chatID)
 	sess.mu.Lock()
 	defer sess.mu.Unlock()
@@ -181,6 +190,9 @@ func handleTGStart(chatID int64) {
 	}
 
 	sess.reset()
+	if strings.HasPrefix(startParam, "swap_") {
+		parseSwapStartParam(sess, startParam[5:])
+	}
 	sess.State = stateSwapCard
 
 	text, markup := renderSwapCard(sess)
@@ -257,7 +269,7 @@ func handleTGStatus(chatID int64, token string) {
 	sess.State = stateOrderActive
 }
 
-// botUsername returns an empty string (unused suffix stripping).
+// botUsername returns the bot's Telegram username for command suffix stripping.
 func botUsername() string {
-	return ""
+	return tgBotUsername
 }

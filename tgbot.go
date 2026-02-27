@@ -20,6 +20,7 @@ var (
 	tgWebhookSecret string
 	tgAppURL        string
 	tgAPIBase       string
+	tgBotUsername   string
 	tgHTTPClient    = &http.Client{}
 )
 
@@ -52,6 +53,9 @@ func initTelegramBot() bool {
 		log.Printf("WARNING: Failed to set Telegram webhook: %v", err)
 	}
 
+	// Fetch bot info (needed for deep links)
+	tgGetMe()
+
 	// Set bot commands
 	tgSetCommands()
 
@@ -62,9 +66,45 @@ func initTelegramBot() bool {
 
 // TGUpdate represents an incoming update from Telegram.
 type TGUpdate struct {
-	UpdateID      int              `json:"update_id"`
-	Message       *TGMessage       `json:"message,omitempty"`
-	CallbackQuery *TGCallbackQuery `json:"callback_query,omitempty"`
+	UpdateID           int                   `json:"update_id"`
+	Message            *TGMessage            `json:"message,omitempty"`
+	CallbackQuery      *TGCallbackQuery      `json:"callback_query,omitempty"`
+	InlineQuery        *TGInlineQuery        `json:"inline_query,omitempty"`
+	ChosenInlineResult *TGChosenInlineResult `json:"chosen_inline_result,omitempty"`
+}
+
+// TGInlineQuery is received when a user types @botname in any chat.
+type TGInlineQuery struct {
+	ID       string `json:"id"`
+	From     TGUser `json:"from"`
+	Query    string `json:"query"`
+	Offset   string `json:"offset"`
+	ChatType string `json:"chat_type,omitempty"`
+}
+
+// TGChosenInlineResult is sent when a user selects an inline result.
+type TGChosenInlineResult struct {
+	ResultID        string `json:"result_id"`
+	From            TGUser `json:"from"`
+	Query           string `json:"query"`
+	InlineMessageID string `json:"inline_message_id,omitempty"`
+}
+
+// TGInlineQueryResultArticle is a text-based inline query result.
+type TGInlineQueryResultArticle struct {
+	Type                string                   `json:"type"`
+	ID                  string                   `json:"id"`
+	Title               string                   `json:"title"`
+	Description         string                   `json:"description,omitempty"`
+	InputMessageContent TGInputTextMessageContent `json:"input_message_content"`
+	ReplyMarkup         *TGInlineKeyboardMarkup  `json:"reply_markup,omitempty"`
+}
+
+// TGInputTextMessageContent is the message content for an inline result.
+type TGInputTextMessageContent struct {
+	MessageText        string                 `json:"message_text"`
+	ParseMode          string                 `json:"parse_mode,omitempty"`
+	LinkPreviewOptions map[string]interface{} `json:"link_preview_options,omitempty"`
 }
 
 // TGMessage represents a Telegram message.
@@ -107,6 +147,7 @@ type TGInlineKeyboardMarkup struct {
 type TGInlineKeyboardButton struct {
 	Text         string    `json:"text"`
 	CallbackData string    `json:"callback_data,omitempty"`
+	URL          string    `json:"url,omitempty"`
 	WebApp       *TGWebApp `json:"web_app,omitempty"`
 	Style        string    `json:"style,omitempty"`
 }
@@ -274,11 +315,34 @@ func tgSendPhoto(chatID int64, pngData []byte, caption string, markup *TGInlineK
 	return &msg, nil
 }
 
+// tgAnswerInlineQuery responds to an inline query with a list of results.
+func tgAnswerInlineQuery(queryID string, results []interface{}, cacheTime int) {
+	payload := map[string]interface{}{
+		"inline_query_id": queryID,
+		"results":         results,
+		"cache_time":      cacheTime,
+	}
+	tgRequest("answerInlineQuery", payload)
+}
+
+// tgGetMe fetches the bot's own user info and stores the username.
+func tgGetMe() {
+	result, err := tgRequest("getMe", map[string]interface{}{})
+	if err != nil {
+		return
+	}
+	var u TGUser
+	json.Unmarshal(result, &u)
+	if u.Username != "" {
+		tgBotUsername = u.Username
+	}
+}
+
 // tgSetWebhook registers the webhook URL with Telegram.
 func tgSetWebhook(url string) error {
 	payload := map[string]interface{}{
 		"url":             url,
-		"allowed_updates": []string{"message", "callback_query"},
+		"allowed_updates": []string{"message", "callback_query", "inline_query"},
 	}
 	_, err := tgRequest("setWebhook", payload)
 	if err != nil {

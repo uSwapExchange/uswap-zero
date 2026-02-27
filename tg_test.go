@@ -603,3 +603,283 @@ func TestButtonStyleField(t *testing.T) {
 		t.Errorf("button Style should be empty, got %q", btn2.Style)
 	}
 }
+
+func TestButtonURLField(t *testing.T) {
+	btn := TGInlineKeyboardButton{
+		Text: "Open",
+		URL:  "https://t.me/testbot?start=swap_BTC-btc_ETH-eth",
+	}
+	if btn.URL == "" {
+		t.Error("button URL should be set")
+	}
+	if btn.CallbackData != "" {
+		t.Error("URL button should not have callback_data")
+	}
+}
+
+// --- inline query tests ---
+
+func TestParseInlineQuery_Empty(t *testing.T) {
+	p := parseInlineQuery("")
+	if p.kind != inlineKindEmpty {
+		t.Errorf("empty query kind = %q, want %q", p.kind, inlineKindEmpty)
+	}
+}
+
+func TestParseInlineQuery_Whitespace(t *testing.T) {
+	p := parseInlineQuery("   ")
+	if p.kind != inlineKindEmpty {
+		t.Errorf("whitespace query kind = %q, want %q", p.kind, inlineKindEmpty)
+	}
+}
+
+func TestParseInlineQuery_Single(t *testing.T) {
+	p := parseInlineQuery("BTC")
+	if p.kind != inlineKindSingle {
+		t.Errorf("kind = %q, want %q", p.kind, inlineKindSingle)
+	}
+	if p.from != "BTC" {
+		t.Errorf("from = %q, want BTC", p.from)
+	}
+}
+
+func TestParseInlineQuery_SinglePartial(t *testing.T) {
+	p := parseInlineQuery("BT")
+	if p.kind != inlineKindSingle {
+		t.Errorf("kind = %q, want %q", p.kind, inlineKindSingle)
+	}
+	if p.from != "BT" {
+		t.Errorf("from = %q, want BT", p.from)
+	}
+}
+
+func TestParseInlineQuery_SingleLowercase(t *testing.T) {
+	p := parseInlineQuery("btc")
+	if p.kind != inlineKindSingle {
+		t.Errorf("kind = %q, want %q", p.kind, inlineKindSingle)
+	}
+	if p.from != "BTC" {
+		t.Errorf("from = %q, want BTC (uppercased)", p.from)
+	}
+}
+
+func TestParseInlineQuery_Pair(t *testing.T) {
+	p := parseInlineQuery("BTC ETH")
+	if p.kind != inlineKindPair {
+		t.Errorf("kind = %q, want %q", p.kind, inlineKindPair)
+	}
+	if p.from != "BTC" || p.to != "ETH" {
+		t.Errorf("from=%q to=%q, want BTC/ETH", p.from, p.to)
+	}
+}
+
+func TestParseInlineQuery_PairAmount(t *testing.T) {
+	p := parseInlineQuery("BTC ETH 0.5")
+	if p.kind != inlineKindPairAmt {
+		t.Errorf("kind = %q, want %q", p.kind, inlineKindPairAmt)
+	}
+	if p.from != "BTC" || p.to != "ETH" || p.amount != "0.5" {
+		t.Errorf("from=%q to=%q amount=%q, want BTC/ETH/0.5", p.from, p.to, p.amount)
+	}
+}
+
+func TestParseInlineQuery_PairNonNumericThird(t *testing.T) {
+	// Third word is not a number → treat as pair, ignore extra
+	p := parseInlineQuery("BTC ETH notanumber")
+	if p.kind != inlineKindPair {
+		t.Errorf("kind = %q, want %q", p.kind, inlineKindPair)
+	}
+}
+
+func TestParseInlineQuery_StatusLower(t *testing.T) {
+	p := parseInlineQuery("status abc123token")
+	if p.kind != inlineKindStatus {
+		t.Errorf("kind = %q, want %q", p.kind, inlineKindStatus)
+	}
+	if p.token != "abc123token" {
+		t.Errorf("token = %q, want abc123token", p.token)
+	}
+}
+
+func TestParseInlineQuery_StatusUpper(t *testing.T) {
+	p := parseInlineQuery("STATUS abc123token")
+	if p.kind != inlineKindStatus {
+		t.Errorf("kind = %q, want %q", p.kind, inlineKindStatus)
+	}
+}
+
+func TestParseInlineQuery_StatusMixed(t *testing.T) {
+	p := parseInlineQuery("Status myToken")
+	if p.kind != inlineKindStatus {
+		t.Errorf("kind = %q, want %q", p.kind, inlineKindStatus)
+	}
+}
+
+func TestBuildDeepLink_WithUsername(t *testing.T) {
+	old := tgBotUsername
+	tgBotUsername = "testswapbot"
+	defer func() { tgBotUsername = old }()
+
+	link := buildDeepLink("BTC", "btc", "ETH", "eth", "0.5")
+	if !strings.Contains(link, "t.me/testswapbot") {
+		t.Errorf("deep link missing bot username: %q", link)
+	}
+	if !strings.Contains(link, "start=swap_BTC-btc_ETH-eth_0.5") {
+		t.Errorf("deep link missing start param: %q", link)
+	}
+}
+
+func TestBuildDeepLink_NoAmount(t *testing.T) {
+	old := tgBotUsername
+	tgBotUsername = "testswapbot"
+	defer func() { tgBotUsername = old }()
+
+	link := buildDeepLink("BTC", "btc", "ETH", "eth", "")
+	if strings.Contains(link, "_eth_") {
+		// Should end at ETH-eth, no trailing underscore
+		t.Errorf("deep link should not have trailing amount separator: %q", link)
+	}
+	want := "start=swap_BTC-btc_ETH-eth"
+	if !strings.Contains(link, want) {
+		t.Errorf("deep link = %q, want to contain %q", link, want)
+	}
+}
+
+func TestBuildDeepLink_NoUsername_FallsBackToAppURL(t *testing.T) {
+	old := tgBotUsername
+	tgBotUsername = ""
+	oldApp := tgAppURL
+	tgAppURL = "https://zero.uswap.net"
+	defer func() {
+		tgBotUsername = old
+		tgAppURL = oldApp
+	}()
+
+	link := buildDeepLink("BTC", "btc", "ETH", "eth", "1")
+	if !strings.Contains(link, "zero.uswap.net") {
+		t.Errorf("fallback link should contain app URL: %q", link)
+	}
+	if !strings.Contains(link, "from=BTC") {
+		t.Errorf("fallback link should contain from=BTC: %q", link)
+	}
+}
+
+func TestParseSwapStartParam_TwoTokens(t *testing.T) {
+	sess := &tgSession{}
+	sess.reset()
+	// Works without a real token cache — tokens won't be found, session keeps defaults
+	parseSwapStartParam(sess, "BTC-btc_ETH-eth")
+	// If cache empty, values keep defaults; just verify no panic and no corruption
+	if sess.FromNet == "" && sess.FromTicker == "" {
+		t.Error("session fields should not be blanked by parseSwapStartParam")
+	}
+}
+
+func TestParseSwapStartParam_WithAmount(t *testing.T) {
+	sess := &tgSession{}
+	sess.reset()
+	parseSwapStartParam(sess, "BTC-btc_ETH-eth_0.5")
+	// Amount should be set regardless of token cache
+	if sess.Amount != "0.5" {
+		t.Errorf("Amount = %q, want 0.5", sess.Amount)
+	}
+}
+
+func TestParseSwapStartParam_Invalid(t *testing.T) {
+	sess := &tgSession{}
+	sess.reset()
+	// Malformed param — should not panic, session keeps defaults
+	parseSwapStartParam(sess, "garbage")
+	if sess.FromTicker != "BTC" {
+		t.Errorf("invalid param should keep default FromTicker BTC, got %q", sess.FromTicker)
+	}
+}
+
+func TestParseSwapStartParam_EmptyAmount(t *testing.T) {
+	sess := &tgSession{}
+	sess.reset()
+	// No amount part
+	parseSwapStartParam(sess, "ETH-eth_USDT-eth")
+	if sess.Amount != "" {
+		t.Errorf("no amount in param should leave Amount empty, got %q", sess.Amount)
+	}
+}
+
+func TestStatusDisplayName(t *testing.T) {
+	tests := []struct {
+		input string
+		want  string
+	}{
+		{"PENDING_DEPOSIT", "Awaiting Deposit"},
+		{"KNOWN_DEPOSIT_TX", "Deposit Detected"},
+		{"PROCESSING", "Processing"},
+		{"SUCCESS", "Completed"},
+		{"REFUNDED", "Refunded"},
+		{"FAILED", "Failed"},
+		{"INCOMPLETE_DEPOSIT", "Incomplete Deposit"},
+		{"pending_deposit", "Awaiting Deposit"}, // case insensitive
+		{"unknown_status", "unknown_status"},    // passthrough
+	}
+	for _, tt := range tests {
+		got := statusDisplayName(tt.input)
+		if got != tt.want {
+			t.Errorf("statusDisplayName(%q) = %q, want %q", tt.input, got, tt.want)
+		}
+	}
+}
+
+func TestFmtEstimate(t *testing.T) {
+	tests := []struct {
+		f    float64
+		want string
+	}{
+		{0, "0"},
+		{1.0, "1"},
+		{1.5, "1.5"},
+		{16.68, "16.68"},
+		{0.00012345, "0.00012345"},
+		{100000.0, "100000"},
+	}
+	for _, tt := range tests {
+		got := fmtEstimate(tt.f)
+		if got != tt.want {
+			t.Errorf("fmtEstimate(%v) = %q, want %q", tt.f, got, tt.want)
+		}
+	}
+}
+
+func TestTGInlineQueryResultArticle_TypeField(t *testing.T) {
+	art := TGInlineQueryResultArticle{
+		Type:  "article",
+		ID:    "test-0",
+		Title: "Test",
+		InputMessageContent: TGInputTextMessageContent{
+			MessageText: "hello",
+		},
+	}
+	if art.Type != "article" {
+		t.Errorf("Type = %q, want article", art.Type)
+	}
+}
+
+func TestBuildEmptyResults_NoCache(t *testing.T) {
+	// With empty token cache, buildEmptyResults should still return the "Start New Swap" article
+	results := buildEmptyResults()
+	if len(results) == 0 {
+		t.Error("buildEmptyResults should always return at least one result")
+	}
+}
+
+func TestBuildSingleTokenResults_NoCache(t *testing.T) {
+	// With empty cache, should not panic
+	results := buildSingleTokenResults("BTC")
+	_ = results // may be empty, that is fine
+}
+
+func TestParseInlineQuery_StatusOnlyOneWord(t *testing.T) {
+	// "status" alone (no token) is treated as a single token search
+	p := parseInlineQuery("status")
+	if p.kind != inlineKindSingle {
+		t.Errorf("lone 'status' kind = %q, want %q", p.kind, inlineKindSingle)
+	}
+}
