@@ -674,6 +674,18 @@ func TestParseInlineQuery_Pair(t *testing.T) {
 }
 
 func TestParseInlineQuery_PairAmount(t *testing.T) {
+	// Natural order: AMOUNT FROM TO
+	p := parseInlineQuery("0.5 BTC ETH")
+	if p.kind != inlineKindPairAmt {
+		t.Errorf("kind = %q, want %q", p.kind, inlineKindPairAmt)
+	}
+	if p.from != "BTC" || p.to != "ETH" || p.amount != "0.5" {
+		t.Errorf("from=%q to=%q amount=%q, want BTC/ETH/0.5", p.from, p.to, p.amount)
+	}
+}
+
+func TestParseInlineQuery_PairAmountLegacy(t *testing.T) {
+	// Legacy order: FROM TO AMOUNT still works
 	p := parseInlineQuery("BTC ETH 0.5")
 	if p.kind != inlineKindPairAmt {
 		t.Errorf("kind = %q, want %q", p.kind, inlineKindPairAmt)

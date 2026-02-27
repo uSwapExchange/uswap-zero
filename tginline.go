@@ -75,6 +75,10 @@ func parseInlineQuery(raw string) parsedInlineQuery {
 	case 2:
 		return parsedInlineQuery{kind: inlineKindPair, from: parts[0], to: parts[1]}
 	default:
+		// Support both "AMOUNT FROM TO" (natural) and "FROM TO AMOUNT" (legacy).
+		if _, err := strconv.ParseFloat(parts[0], 64); err == nil {
+			return parsedInlineQuery{kind: inlineKindPairAmt, from: parts[1], to: parts[2], amount: parts[0]}
+		}
 		if _, err := strconv.ParseFloat(parts[2], 64); err == nil {
 			return parsedInlineQuery{kind: inlineKindPairAmt, from: parts[0], to: parts[1], amount: parts[2]}
 		}

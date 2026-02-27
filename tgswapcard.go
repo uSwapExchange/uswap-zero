@@ -63,9 +63,9 @@ func buildAppURL(sess *tgSession) string {
 func renderSwapCard(sess *tgSession) (string, *TGInlineKeyboardMarkup) {
 	var sb strings.Builder
 
-	// Live counter line — only shown when monitor is running
-	if total := monitorTotalFeeUSD(); total > 0 {
-		sb.WriteString("Don't be a part of the " + formatUSD(total) + " lost to @APIWrappers\n\n")
+	// Inline capability hint — only shown when monitor is running
+	if monitorTotalFeeUSD() > 0 {
+		sb.WriteString("Share swaps anywhere — type @" + tgBotUsername + " 0.5 BTC ETH in any chat\n\n")
 	}
 
 	sb.WriteString("<pre>" + renderSwapCardMono(sess) + "</pre>")
