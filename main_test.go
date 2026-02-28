@@ -369,7 +369,7 @@ func TestDryQuoteETHtoUSDT(t *testing.T) {
 
 	quoteReq := &QuoteRequest{
 		Dry:                true,
-		SwapType:           "EXACT_INPUT",
+		SwapType:           "FLEX_INPUT",
 		SlippageTolerance:  100, // 1%
 		OriginAsset:        eth.DefuseAssetID,
 		DepositType:        "ORIGIN_CHAIN",
@@ -430,7 +430,7 @@ func TestDryQuoteBTCtoETH(t *testing.T) {
 
 	quoteReq := &QuoteRequest{
 		Dry:                true,
-		SwapType:           "EXACT_INPUT",
+		SwapType:           "FLEX_INPUT",
 		SlippageTolerance:  200, // 2%
 		OriginAsset:        btc.DefuseAssetID,
 		DepositType:        "ORIGIN_CHAIN",
@@ -950,7 +950,7 @@ func TestFormatRate(t *testing.T) {
 func TestQuoteRequestJSON(t *testing.T) {
 	req := &QuoteRequest{
 		Dry:               true,
-		SwapType:          "EXACT_INPUT",
+		SwapType:          "FLEX_INPUT",
 		SlippageTolerance: 100,
 		Amount:            "1000000000000000000",
 		AppFees:           []struct{}{},

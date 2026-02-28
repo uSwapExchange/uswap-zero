@@ -46,7 +46,7 @@
   <!-- Deposit Instructions -->
   <div class="deposit-card">
     <h2 class="deposit-card__title">
-      {{if eq .StatusStep 0}}{{if eq .Order.SwapType "ANY_INPUT"}}Send any amount of {{.Order.FromTicker}}:{{else}}Send exactly:{{end}}{{else}}Processing your swap...{{end}}
+      {{if eq .StatusStep 0}}{{if eq .Order.SwapType "ANY_INPUT"}}Send any amount of {{.Order.FromTicker}}:{{else if eq .Order.SwapType "FLEX_INPUT"}}Send:{{else}}Send exactly:{{end}}{{else}}Processing your swap...{{end}}
     </h2>
 
     {{if eq .StatusStep 0}}
