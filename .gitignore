@@ -18,3 +18,4 @@ CLAUDE.md
 *.png
 data/monitor_state.json
 data/subscribers.txt
+data/unsubscribers.txt

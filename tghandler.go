@@ -72,6 +72,10 @@ func handleTGMessage(msg *TGMessage) {
 			handleTGStart(chatID, startParam)
 		case "/verify":
 			handleTGVerify(chatID)
+		case "/forget":
+			handleTGForget(chatID)
+		case "/subscribe":
+			handleTGSubscribe(chatID)
 		case "/status":
 			if len(cmd) > 1 {
 				handleTGStatus(chatID, strings.TrimSpace(cmd[1]))
@@ -277,6 +281,19 @@ func handleTGStatus(chatID int64, token string) {
 	sess.CardMsgID = msg.MessageID
 	sess.OrderToken = token
 	sess.State = stateOrderActive
+}
+
+// handleTGForget removes the user from subscribers and hashes their ID so
+// the opt-out persists without storing their actual ID.
+func handleTGForget(chatID int64) {
+	subscribers.forget(chatID)
+	tgSendMessage(chatID, "Done — you've been forgotten. No updates will be sent.\n\nYou can still use the bot normally. /subscribe to re-subscribe.", nil)
+}
+
+// handleTGSubscribe re-adds a previously forgotten user.
+func handleTGSubscribe(chatID int64) {
+	subscribers.resubscribe(chatID)
+	tgSendMessage(chatID, "You're subscribed to updates. /forget to opt out.", nil)
 }
 
 // botUsername returns the bot's Telegram username for command suffix stripping.
