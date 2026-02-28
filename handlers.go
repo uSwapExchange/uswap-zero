@@ -93,6 +93,7 @@ type SwapPageData struct {
 	To         string
 	ToNet      string
 	Amount     string
+	AmountOut  string // receive amount for EXACT_OUTPUT
 	Recipient  string
 	RefundAddr string
 	Slippage   string
@@ -131,7 +132,8 @@ type QuotePageData struct {
 	SpreadPct       string
 	FromToken       *TokenInfo
 	ToToken         *TokenInfo
-	HasJWT          bool // true if NEAR_INTENTS_JWT is set (0% protocol fee)
+	HasJWT          bool   // true if NEAR_INTENTS_JWT is set (0% protocol fee)
+	SwapType        string // FLEX_INPUT or EXACT_OUTPUT
 }
 
 // OrderPageData is the data for the order status page.
@@ -144,6 +146,7 @@ type OrderPageData struct {
 	TimeRemaining string
 	IsTerminal    bool
 	StatusStep    int // 0=pending, 1=processing, 2=complete
+	Withdrawals   *AnyInputWithdrawalsResponse
 }
 
 // CurrenciesPageData is the data for the currencies list page.
@@ -196,6 +199,7 @@ func handleSwap(w http.ResponseWriter, r *http.Request) {
 		To:         r.URL.Query().Get("to"),
 		ToNet:      r.URL.Query().Get("to_net"),
 		Amount:     r.URL.Query().Get("amt"),
+		AmountOut:  r.URL.Query().Get("amt_out"),
 		Recipient:  r.URL.Query().Get("recipient"),
 		Slippage:   r.URL.Query().Get("slippage"),
 		CSRFToken:  generateCSRFToken("quote"),
@@ -267,15 +271,13 @@ func handleQuote(w http.ResponseWriter, r *http.Request) {
 	toTicker := strings.ToUpper(r.FormValue("to"))
 	toNet := r.FormValue("to_net")
 	amount := r.FormValue("amount")
+	amountOutForm := r.FormValue("amount_out")
 	recipient := strings.TrimSpace(r.FormValue("recipient"))
 	refundAddr := strings.TrimSpace(r.FormValue("refund_addr"))
 	slippage := r.FormValue("slippage")
 
-	// Validation
+	// Validation (amount is optional — determines swap type)
 	var errors []string
-	if amount == "" {
-		errors = append(errors, "Amount is required")
-	}
 	if recipient == "" {
 		errors = append(errors, "Recipient address is required")
 	}
@@ -295,22 +297,84 @@ func handleQuote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Convert amount to atomic
-	atomicAmount, err := humanToAtomic(amount, fromToken.Decimals)
-	if err != nil {
-		renderError(w, 400, "Invalid Amount", "Could not parse the amount: "+err.Error(), "Go Back", "/")
-		return
-	}
-
 	slippageBPS, err := slippageToBPS(slippage)
 	if err != nil {
 		slippageBPS = 100 // default 1%
 	}
 
+	// Auto-detect swap type based on which amount field is filled.
+	// Both filled: prefer send amount (FLEX_INPUT).
+	swapType := "FLEX_INPUT"
+	if amount == "" && amountOutForm == "" {
+		swapType = "ANY_INPUT"
+	} else if amountOutForm != "" && amount == "" {
+		swapType = "EXACT_OUTPUT"
+	}
+
+	// ANY_INPUT: skip dry quote, go directly to real quote → deposit page.
+	if swapType == "ANY_INPUT" {
+		refAmount, _ := humanToAtomic("1", fromToken.Decimals)
+		quoteReq := &QuoteRequest{
+			Dry:                false,
+			SwapType:           "ANY_INPUT",
+			SlippageTolerance:  slippageBPS,
+			OriginAsset:        fromToken.DefuseAssetID,
+			DepositType:        "ORIGIN_CHAIN",
+			DestinationAsset:   toToken.DefuseAssetID,
+			Amount:             refAmount,
+			RefundTo:           refundAddr,
+			RefundType:         "ORIGIN_CHAIN",
+			Recipient:          recipient,
+			RecipientType:      "DESTINATION_CHAIN",
+			Deadline:           buildDeadline(time.Hour),
+			QuoteWaitingTimeMs: 8000,
+			AppFees:            []struct{}{},
+		}
+		quoteResp, err := requestQuote(quoteReq)
+		if err != nil {
+			renderError(w, 502, "Quick Swap Failed", "NEAR Intents API is temporarily unavailable. This usually resolves in a few minutes.", "Try Again", "/")
+			return
+		}
+		orderData := &OrderData{
+			DepositAddr: quoteResp.Quote.DepositAddress,
+			Memo:        quoteResp.Quote.DepositMemo,
+			FromTicker:  fromTicker,
+			FromNet:     fromNet,
+			ToTicker:    toTicker,
+			ToNet:       toNet,
+			AmountIn:    "any",
+			AmountOut:   "market rate",
+			Deadline:    quoteResp.Quote.Deadline,
+			CorrID:      quoteResp.CorrelationID,
+			RefundAddr:  refundAddr,
+			RecvAddr:    recipient,
+			SwapType:    "ANY_INPUT",
+		}
+		token, err := encryptOrderData(orderData)
+		if err != nil {
+			renderError(w, 500, "Internal Error", "Failed to create order token.", "Back to Home", "/")
+			return
+		}
+		http.Redirect(w, r, "/order/"+token, http.StatusFound)
+		return
+	}
+
+	// FLEX_INPUT or EXACT_OUTPUT: convert the appropriate amount to atomic.
+	var atomicAmount string
+	if swapType == "EXACT_OUTPUT" {
+		atomicAmount, err = humanToAtomic(amountOutForm, toToken.Decimals)
+	} else {
+		atomicAmount, err = humanToAtomic(amount, fromToken.Decimals)
+	}
+	if err != nil {
+		renderError(w, 400, "Invalid Amount", "Could not parse the amount: "+err.Error(), "Go Back", "/")
+		return
+	}
+
 	// Request dry quote from NEAR Intents
 	quoteReq := &QuoteRequest{
 		Dry:                true,
-		SwapType:           "EXACT_INPUT",
+		SwapType:           swapType,
 		SlippageTolerance:  slippageBPS,
 		OriginAsset:        fromToken.DefuseAssetID,
 		DepositType:        "ORIGIN_CHAIN",
@@ -331,13 +395,22 @@ func handleQuote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Extract amount from nested dry quote response
-	amountOut := dryResp.Quote.AmountOut
-	if amountOut == "" || amountOut == "0" {
+	// Extract amounts from dry quote response.
+	// For EXACT_OUTPUT, AmountIn is estimated and AmountOut is exact.
+	// For FLEX_INPUT, both are approximate.
+	humanIn := dryResp.Quote.AmountInFormatted
+	humanOut := dryResp.Quote.AmountOutFormatted
+	if humanIn == "" {
+		humanIn = amount
+	}
+	if humanOut == "" {
+		humanOut = atomicToHuman(dryResp.Quote.AmountOut, toToken.Decimals)
+	}
+
+	if dryResp.Quote.AmountOut == "" || dryResp.Quote.AmountOut == "0" {
 		renderError(w, 502, "Quote Unavailable", "No market makers are currently offering a rate for this pair/amount. Try a larger amount or a different pair.", "Go Back", "/")
 		return
 	}
-	humanOut := atomicToHuman(amountOut, toToken.Decimals)
 
 	// USD values
 	amountInUSD := ""
@@ -346,13 +419,14 @@ func handleQuote(w http.ResponseWriter, r *http.Request) {
 	spreadPct := ""
 	rate := ""
 
-	if fromToken.Price > 0 {
-		inFloat, _ := parseFloat(amount)
+	inFloat, _ := parseFloat(humanIn)
+	outFloat, _ := parseFloat(humanOut)
+
+	if fromToken.Price > 0 && inFloat > 0 {
 		inUSD := inFloat * fromToken.Price
 		amountInUSD = formatUSD(inUSD)
 
-		if toToken.Price > 0 {
-			outFloat, _ := parseFloat(humanOut)
+		if toToken.Price > 0 && outFloat > 0 {
 			outUSD := outFloat * toToken.Price
 			amountOutUSD = formatUSD(outUSD)
 
@@ -365,9 +439,7 @@ func handleQuote(w http.ResponseWriter, r *http.Request) {
 				spreadPct = fmt.Sprintf("%.2f%%", (spread/inUSD)*100)
 			}
 
-			if inFloat > 0 {
-				rate = fmt.Sprintf("1 %s = %s %s", fromTicker, formatRate(outFloat/inFloat), toTicker)
-			}
+			rate = fmt.Sprintf("1 %s = %s %s", fromTicker, formatRate(outFloat/inFloat), toTicker)
 		}
 	}
 
@@ -379,7 +451,7 @@ func handleQuote(w http.ResponseWriter, r *http.Request) {
 		To:           toTicker,
 		ToNet:        toNet,
 		ToTicker:     toTicker,
-		AmountIn:     amount,
+		AmountIn:     humanIn,
 		AmountInUSD:  amountInUSD,
 		AmountOut:    humanOut,
 		AmountOutUSD: amountOutUSD,
@@ -397,6 +469,7 @@ func handleQuote(w http.ResponseWriter, r *http.Request) {
 		FromToken:    fromToken,
 		ToToken:      toToken,
 		HasJWT:       nearIntentsJWT != "",
+		SwapType:     swapType,
 	}
 
 	data.FromColor, data.FromColorA = tokenColorPair(fromTicker)
@@ -434,6 +507,10 @@ func handleSwapConfirm(w http.ResponseWriter, r *http.Request) {
 	recipient := r.FormValue("recipient")
 	refundAddr := r.FormValue("refund_addr")
 	slippageBPS := r.FormValue("slippage_bps")
+	swapType := r.FormValue("swap_type")
+	if swapType == "" {
+		swapType = "FLEX_INPUT"
+	}
 
 	fromToken := findToken(fromTicker, fromNet)
 	toToken := findToken(toTicker, toNet)
@@ -448,7 +525,7 @@ func handleSwapConfirm(w http.ResponseWriter, r *http.Request) {
 	// Real quote (not dry)
 	quoteReq := &QuoteRequest{
 		Dry:                false,
-		SwapType:           "EXACT_INPUT",
+		SwapType:           swapType,
 		SlippageTolerance:  bps,
 		OriginAsset:        fromToken.DefuseAssetID,
 		DepositType:        "ORIGIN_CHAIN",
@@ -483,6 +560,7 @@ func handleSwapConfirm(w http.ResponseWriter, r *http.Request) {
 		CorrID:      quoteResp.CorrelationID,
 		RefundAddr:  refundAddr,
 		RecvAddr:    recipient,
+		SwapType:    swapType,
 	}
 
 	token, err := encryptOrderData(orderData)
@@ -577,6 +655,12 @@ func handleOrder(w http.ResponseWriter, r *http.Request) {
 		refresh = 10
 	}
 
+	// For ANY_INPUT orders, fetch withdrawal history.
+	var withdrawals *AnyInputWithdrawalsResponse
+	if order.SwapType == "ANY_INPUT" {
+		withdrawals, _ = fetchAnyInputWithdrawals(order.DepositAddr)
+	}
+
 	data := OrderPageData{
 		PageData:      newPageData("Order Status"),
 		Token:         path,
@@ -586,6 +670,7 @@ func handleOrder(w http.ResponseWriter, r *http.Request) {
 		TimeRemaining: timeRemaining,
 		IsTerminal:    isTerminal,
 		StatusStep:    statusStep,
+		Withdrawals:   withdrawals,
 	}
 	data.MetaRefresh = refresh
 	data.FromColor, data.FromColorA = tokenColorPair(order.FromTicker)

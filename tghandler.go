@@ -87,6 +87,8 @@ func handleTGMessage(msg *TGMessage) {
 	switch sess.State {
 	case stateEnterAmount:
 		handleTGAmountInput(chatID, sess, msg)
+	case stateEnterAmountOut:
+		handleTGAmountOutInput(chatID, sess, msg)
 	case stateEnterRefund:
 		handleTGRefundInput(chatID, sess, msg)
 	case stateEnterRecv:
@@ -133,6 +135,9 @@ func handleTGCallback(cb *TGCallbackQuery) {
 	case data == "sa":
 		tgAnswerCallback(cb.ID, "")
 		handleTGPromptAmount(chatID, sess)
+	case data == "sao":
+		tgAnswerCallback(cb.ID, "")
+		handleTGPromptAmountOut(chatID, sess)
 	case data == "sr":
 		tgAnswerCallback(cb.ID, "")
 		handleTGPromptRefund(chatID, sess)

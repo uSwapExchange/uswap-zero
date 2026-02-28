@@ -60,6 +60,10 @@ type QuoteDetail struct {
 	AmountInFmt    string `json:"amountInFormatted"`
 	AmountOut      string `json:"amountOut"`
 	AmountOutFmt   string `json:"amountOutFormatted"`
+	MinAmountIn    string `json:"minAmountIn,omitempty"`
+	MinAmountInFmt string `json:"minAmountInFormatted,omitempty"`
+	MaxAmountIn    string `json:"maxAmountIn,omitempty"`
+	MaxAmountInFmt string `json:"maxAmountInFormatted,omitempty"`
 	Deadline       string `json:"deadline,omitempty"`
 	TimeEstimate   int    `json:"timeEstimate"`
 }
@@ -75,6 +79,10 @@ type DryQuoteResponse struct {
 		AmountOutFormatted string `json:"amountOutFormatted"`
 		AmountOutUSD       string `json:"amountOutUsd"`
 		MinAmountOut       string `json:"minAmountOut"`
+		MinAmountIn        string `json:"minAmountIn"`
+		MinAmountInFmt     string `json:"minAmountInFormatted"`
+		MaxAmountIn        string `json:"maxAmountIn"`
+		MaxAmountInFmt     string `json:"maxAmountInFormatted"`
 		TimeEstimate       int    `json:"timeEstimate"`
 	} `json:"quote"`
 	CorrelationID string `json:"correlationId"`
@@ -258,5 +266,37 @@ func fetchStatus(depositAddress, depositMemo string) (*StatusResponse, error) {
 // buildDeadline returns an ISO 8601 deadline string from a duration.
 func buildDeadline(d time.Duration) string {
 	return time.Now().UTC().Add(d).Format(time.RFC3339)
+}
+
+// AnyInputWithdrawal represents a single completed swap through an ANY_INPUT deposit address.
+type AnyInputWithdrawal struct {
+	Status             string `json:"status"`
+	AmountOut          string `json:"amountOut"`
+	AmountOutFormatted string `json:"amountOutFormatted"`
+	AmountOutUSD       string `json:"amountOutUsd"`
+	WithdrawFee        string `json:"withdrawFee"`
+	WithdrawFeeFmt     string `json:"withdrawFeeFormatted"`
+	WithdrawFeeUSD     string `json:"withdrawFeeUsd"`
+	Timestamp          string `json:"timestamp"`
+	Hash               string `json:"hash"`
+}
+
+// AnyInputWithdrawalsResponse is the response from GET /v0/any-input/withdrawals.
+type AnyInputWithdrawalsResponse struct {
+	Withdrawals []AnyInputWithdrawal `json:"withdrawals"`
+}
+
+// fetchAnyInputWithdrawals retrieves completed swap history for an ANY_INPUT deposit address.
+func fetchAnyInputWithdrawals(depositAddress string) (*AnyInputWithdrawalsResponse, error) {
+	q := url.Values{"depositAddress": {depositAddress}}
+	data, err := nearRequest("GET", "/v0/any-input/withdrawals?"+q.Encode(), nil)
+	if err != nil {
+		return nil, err
+	}
+	var resp AnyInputWithdrawalsResponse
+	if err := json.Unmarshal(data, &resp); err != nil {
+		return nil, fmt.Errorf("parse any-input withdrawals: %w", err)
+	}
+	return &resp, nil
 }
 

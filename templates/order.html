@@ -46,11 +46,11 @@
   <!-- Deposit Instructions -->
   <div class="deposit-card">
     <h2 class="deposit-card__title">
-      {{if eq .StatusStep 0}}Send exactly:{{else}}Processing your swap...{{end}}
+      {{if eq .StatusStep 0}}{{if eq .Order.SwapType "ANY_INPUT"}}Send any amount of {{.Order.FromTicker}}:{{else}}Send exactly:{{end}}{{else}}Processing your swap...{{end}}
     </h2>
 
     {{if eq .StatusStep 0}}
-    <div class="deposit-amount">{{.Order.AmountIn}} {{.Order.FromTicker}}</div>
+    {{if ne .Order.SwapType "ANY_INPUT"}}<div class="deposit-amount">{{.Order.AmountIn}} {{.Order.FromTicker}}</div>{{end}}
 
     <div class="deposit-address-wrap">
       <div class="deposit-address" id="deposit-addr">{{.Order.DepositAddr}}</div>
@@ -75,6 +75,19 @@
     </div>
     {{else}}
     <p class="text-muted pulse">Waiting for confirmation on the network...</p>
+    {{end}}
+  </div>
+  {{end}}
+
+  {{if and .Withdrawals .Withdrawals.Withdrawals}}
+  <!-- ANY_INPUT Swap History -->
+  <div class="transparency-card">
+    <div class="transparency-card__title">Swap History</div>
+    {{range .Withdrawals.Withdrawals}}
+    <div class="transparency-row">
+      <span class="transparency-row__label">{{.AmountOutFormatted}} {{$.Order.ToTicker}}</span>
+      <span class="transparency-row__value">{{if .AmountOutUSD}}${{.AmountOutUSD}}{{end}} &middot; {{.Status}}</span>
+    </div>
     {{end}}
   </div>
   {{end}}

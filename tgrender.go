@@ -133,6 +133,16 @@ type QuoteCardData struct {
 	Rate         string
 	SpreadUSD    string
 	SpreadPct    string
+	SwapType     string // FLEX_INPUT or EXACT_OUTPUT
+}
+
+// AnyInputCardData holds data for renderAnyInputDepositCardMono.
+type AnyInputCardData struct {
+	FromTicker string
+	ToTicker   string
+	Network    string
+	RefundAddr string
+	RecvAddr   string
 }
 
 // DepositCardData holds data for renderDepositCardMono.
@@ -174,7 +184,12 @@ func renderSwapCardMono(sess *tgSession) string {
 	} else {
 		sendVal = safeRunes("─── "+fromTicker+" / "+fromNetS, 24)
 	}
-	recvVal := safeRunes("─── "+toTicker+" / "+toNetS, 24)
+	var recvVal string
+	if sess.AmountOut != "" {
+		recvVal = safeRunes(sess.AmountOut+" "+toTicker+" / "+toNetS, 24)
+	} else {
+		recvVal = safeRunes("─── "+toTicker+" / "+toNetS, 24)
+	}
 
 	sb.WriteString(cardRowKV("SEND", sendVal) + "\n")
 	sb.WriteString(cardRowKV("RECEIVE", recvVal) + "\n")
@@ -220,14 +235,25 @@ func renderQuoteCardMono(p QuoteCardData) string {
 	amtInUSD := safeRunes(p.AmountInUSD, 12)
 	amtOutUSD := safeRunes(p.AmountOutUSD, 12)
 
-	sb.WriteString(cardRowKV("SEND", amtIn+" "+fromTicker) + "\n")
+	sendLabel := "SEND"
+	recvLabel := "RECEIVE"
+	sendPrefix := ""
+	recvPrefix := "~ "
+	if p.SwapType == "EXACT_OUTPUT" {
+		sendLabel = "SEND (est.)"
+		recvLabel = "RECEIVE"
+		sendPrefix = "~ "
+		recvPrefix = ""
+	}
+
+	sb.WriteString(cardRowKV(sendLabel, sendPrefix+amtIn+" "+fromTicker) + "\n")
 	if p.AmountInUSD != "" {
 		sb.WriteString(cardRowRight("~ "+amtInUSD+" ") + "\n")
 	}
 	sb.WriteString(cardRowCenter("\u2193") + "\n")
 
 	// RECEIVE section
-	sb.WriteString(cardRowKV("RECEIVE", "~ "+amtOut+" "+toTicker) + "\n")
+	sb.WriteString(cardRowKV(recvLabel, recvPrefix+amtOut+" "+toTicker) + "\n")
 	if p.AmountOutUSD != "" {
 		sb.WriteString(cardRowRight("~ "+amtOutUSD+" ") + "\n")
 	}
@@ -289,6 +315,39 @@ func renderDepositCardMono(p DepositCardData) string {
 	}
 
 	// Addresses (truncated)
+	if p.RefundAddr != "" || p.RecvAddr != "" {
+		sb.WriteString(cardMid() + "\n")
+		if p.RefundAddr != "" {
+			sb.WriteString(cardRowKV("REFUND", safeRunes(truncAddr(p.RefundAddr), 16)) + "\n")
+		}
+		if p.RecvAddr != "" {
+			sb.WriteString(cardRowKV("RECEIVE", safeRunes(truncAddr(p.RecvAddr), 16)) + "\n")
+		}
+	}
+
+	sb.WriteString(cardBot())
+	return sb.String()
+}
+
+// renderAnyInputDepositCardMono builds the monospace deposit card for ANY_INPUT mode.
+// Note: deposit address is NOT included — callers add it as a separate <code> block.
+func renderAnyInputDepositCardMono(p AnyInputCardData) string {
+	var sb strings.Builder
+
+	sb.WriteString(cardTop() + "\n")
+	sb.WriteString(cardRow(" Ø USWAP ZERO \u2014 QUICK SWAP") + "\n")
+	sb.WriteString(cardMid() + "\n")
+
+	fromT := safeRunes(p.FromTicker, 8)
+	toT := safeRunes(p.ToTicker, 8)
+
+	sb.WriteString(cardRowKV("SEND", "any "+fromT) + "\n")
+	sb.WriteString(cardRowKV("RECEIVE", "~ market "+toT) + "\n")
+	sb.WriteString(cardMid() + "\n")
+
+	network := safeRunes(p.Network, 18)
+	sb.WriteString(cardRowKV("NETWORK", network) + "\n")
+
 	if p.RefundAddr != "" || p.RecvAddr != "" {
 		sb.WriteString(cardMid() + "\n")
 		if p.RefundAddr != "" {
