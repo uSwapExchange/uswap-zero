@@ -276,6 +276,17 @@ func handleTGConfirmSwap(chatID int64, sess *tgSession) {
 		return
 	}
 
+	// For FLEX_INPUT, use the user's original amount (the API may return a
+	// different amountIn since FLEX_INPUT accepts a range).
+	amountIn := quoteResp.Quote.AmountInFmt
+	amountOut := quoteResp.Quote.AmountOutFmt
+	if swapType == "FLEX_INPUT" && sess.Amount != "" {
+		amountIn = sess.Amount
+	}
+	if swapType == "EXACT_OUTPUT" && sess.AmountOut != "" {
+		amountOut = sess.AmountOut
+	}
+
 	order := &OrderData{
 		DepositAddr: quoteResp.Quote.DepositAddress,
 		Memo:        quoteResp.Quote.DepositMemo,
@@ -283,8 +294,8 @@ func handleTGConfirmSwap(chatID int64, sess *tgSession) {
 		FromNet:     sess.FromNet,
 		ToTicker:    sess.ToTicker,
 		ToNet:       sess.ToNet,
-		AmountIn:    quoteResp.Quote.AmountInFmt,
-		AmountOut:   quoteResp.Quote.AmountOutFmt,
+		AmountIn:    amountIn,
+		AmountOut:   amountOut,
 		Deadline:    quoteResp.Quote.Deadline,
 		CorrID:      quoteResp.CorrelationID,
 		RefundAddr:  sess.RefundAddr,

@@ -504,6 +504,8 @@ func handleSwapConfirm(w http.ResponseWriter, r *http.Request) {
 	toTicker := strings.ToUpper(r.FormValue("to"))
 	toNet := r.FormValue("to_net")
 	atomicAmount := r.FormValue("atomic_amount")
+	userAmountIn := r.FormValue("amount_in")   // user's original input
+	userAmountOut := r.FormValue("amount_out")  // user's original output (EXACT_OUTPUT)
 	recipient := r.FormValue("recipient")
 	refundAddr := r.FormValue("refund_addr")
 	slippageBPS := r.FormValue("slippage_bps")
@@ -546,7 +548,18 @@ func handleSwapConfirm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Encrypt order data into token — use API's canonical formatted amounts.
+	// For FLEX_INPUT, use the user's original amount (the API may return a
+	// different amountIn since FLEX_INPUT accepts a range). For EXACT_OUTPUT,
+	// use the user's desired output and the API's estimated input.
+	amountIn := quoteResp.Quote.AmountInFmt
+	amountOut := quoteResp.Quote.AmountOutFmt
+	if swapType == "FLEX_INPUT" && userAmountIn != "" {
+		amountIn = userAmountIn
+	}
+	if swapType == "EXACT_OUTPUT" && userAmountOut != "" {
+		amountOut = userAmountOut
+	}
+
 	orderData := &OrderData{
 		DepositAddr: quoteResp.Quote.DepositAddress,
 		Memo:        quoteResp.Quote.DepositMemo,
@@ -554,8 +567,8 @@ func handleSwapConfirm(w http.ResponseWriter, r *http.Request) {
 		FromNet:     fromNet,
 		ToTicker:    toTicker,
 		ToNet:       toNet,
-		AmountIn:    quoteResp.Quote.AmountInFmt,
-		AmountOut:   quoteResp.Quote.AmountOutFmt,
+		AmountIn:    amountIn,
+		AmountOut:   amountOut,
 		Deadline:    quoteResp.Quote.Deadline,
 		CorrID:      quoteResp.CorrelationID,
 		RefundAddr:  refundAddr,
