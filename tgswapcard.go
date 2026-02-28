@@ -66,7 +66,7 @@ func buildAppURL(sess *tgSession) string {
 func renderSwapCard(sess *tgSession) (string, *TGInlineKeyboardMarkup) {
 	var sb strings.Builder
 
-	sb.WriteString("📢 Updates &amp; announcements → <a href=\"https://t.me/CryptoToCrypto\">t.me/CryptoToCrypto</a>\n\n")
+	sb.WriteString("📢 Updates, info, &amp; help → <a href=\"https://t.me/uSwapZero\">t.me/uSwapZero</a>\n\n")
 
 	sb.WriteString("<pre>" + renderSwapCardMono(sess) + "</pre>")
 
