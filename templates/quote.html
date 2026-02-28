@@ -6,7 +6,7 @@
   <div class="quote-flow">
     <!-- YOU SEND -->
     <div class="quote-card quote-card--send">
-      <div class="quote-card__label">You Send</div>
+      <div class="quote-card__label">{{if eq .SwapType "EXACT_OUTPUT"}}You Send (estimated){{else}}You Send{{end}}</div>
       <div class="quote-card__row">
         <img src="{{iconPath .FromTicker}}" alt="" class="currency-pill__icon">
         <div class="quote-card__info">
@@ -20,7 +20,7 @@
 
     <!-- YOU RECEIVE -->
     <div class="quote-card quote-card--receive">
-      <div class="quote-card__label">You Receive (estimated)</div>
+      <div class="quote-card__label">{{if eq .SwapType "EXACT_OUTPUT"}}You Receive (exact){{else}}You Receive (estimated){{end}}</div>
       <div class="quote-card__row">
         <img src="{{iconPath .ToTicker}}" alt="" class="currency-pill__icon">
         <div class="quote-card__info">
@@ -81,6 +81,7 @@
     <input type="hidden" name="recipient" value="{{.Recipient}}">
     <input type="hidden" name="refund_addr" value="{{.RefundAddr}}">
     <input type="hidden" name="slippage_bps" value="{{.SlippageBPS}}">
+    <input type="hidden" name="swap_type" value="{{.SwapType}}">
     <div class="btn-row">
       <a href="/" class="btn btn--ghost">&#8592; Go Back</a>
       <button type="submit" class="btn btn--primary">Confirm Swap &rarr;</button>

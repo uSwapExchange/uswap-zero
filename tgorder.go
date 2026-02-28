@@ -9,6 +9,7 @@ import (
 )
 
 // handleTGGetQuote fetches a dry quote and shows a monospace quote card.
+// For ANY_INPUT mode, it skips the dry quote and goes directly to a real quote.
 func handleTGGetQuote(chatID int64, sess *tgSession) {
 	if !sess.isComplete() {
 		return
@@ -21,10 +22,25 @@ func handleTGGetQuote(chatID int64, sess *tgSession) {
 		return
 	}
 
+	swapType := sess.swapType()
+
+	// ANY_INPUT: skip dry quote, go directly to real quote.
+	if swapType == "ANY_INPUT" {
+		handleTGAnyInputSwap(chatID, sess, fromToken, toToken)
+		return
+	}
+
 	// Show loading state
 	tgEditMessage(chatID, sess.CardMsgID, "⏳ Fetching quote...\n<i>(may take up to 24s)</i>", nil)
 
-	atomic, err := humanToAtomic(sess.Amount, fromToken.Decimals)
+	// Determine amount + swap type for the API.
+	var atomic string
+	var err error
+	if swapType == "EXACT_OUTPUT" {
+		atomic, err = humanToAtomic(sess.AmountOut, toToken.Decimals)
+	} else {
+		atomic, err = humanToAtomic(sess.Amount, fromToken.Decimals)
+	}
 	if err != nil {
 		showErrorAndCard(chatID, sess, "Invalid amount: "+err.Error())
 		return
@@ -34,7 +50,7 @@ func handleTGGetQuote(chatID int64, sess *tgSession) {
 
 	req := &QuoteRequest{
 		Dry:                true,
-		SwapType:           "EXACT_INPUT",
+		SwapType:           swapType,
 		SlippageTolerance:  bps,
 		OriginAsset:        fromToken.DefuseAssetID,
 		DepositType:        "ORIGIN_CHAIN",
@@ -106,6 +122,7 @@ func handleTGGetQuote(chatID int64, sess *tgSession) {
 		Rate:         rate,
 		SpreadUSD:    spreadUSD,
 		SpreadPct:    spreadPct,
+		SwapType:     swapType,
 	}) + "</pre>"
 
 	markup := &TGInlineKeyboardMarkup{
@@ -122,6 +139,90 @@ func handleTGGetQuote(chatID int64, sess *tgSession) {
 	}
 }
 
+// handleTGAnyInputSwap handles ANY_INPUT mode: skip dry quote, issue real quote, show deposit card.
+func handleTGAnyInputSwap(chatID int64, sess *tgSession, fromToken, toToken *TokenInfo) {
+	tgEditMessage(chatID, sess.CardMsgID, "⏳ Setting up quick swap...\n<i>(may take up to 24s)</i>", nil)
+
+	// Use 1-unit reference amount for the quote
+	refAmount := "1" + strings.Repeat("0", fromToken.Decimals)
+	bps, _ := slippageToBPS(sess.Slippage)
+
+	req := &QuoteRequest{
+		Dry:                false,
+		SwapType:           "ANY_INPUT",
+		SlippageTolerance:  bps,
+		OriginAsset:        fromToken.DefuseAssetID,
+		DepositType:        "ORIGIN_CHAIN",
+		DestinationAsset:   toToken.DefuseAssetID,
+		Amount:             refAmount,
+		RefundTo:           sess.RefundAddr,
+		RefundType:         "ORIGIN_CHAIN",
+		Recipient:          sess.RecvAddr,
+		RecipientType:      "DESTINATION_CHAIN",
+		Deadline:           buildDeadline(1 * time.Hour),
+		QuoteWaitingTimeMs: 24000,
+		AppFees:            []struct{}{},
+	}
+
+	quoteResp, err := requestQuote(req)
+	if err != nil {
+		showErrorAndCard(chatID, sess, "Quick swap failed: "+err.Error())
+		return
+	}
+
+	order := &OrderData{
+		DepositAddr: quoteResp.Quote.DepositAddress,
+		Memo:        quoteResp.Quote.DepositMemo,
+		FromTicker:  sess.FromTicker,
+		FromNet:     sess.FromNet,
+		ToTicker:    sess.ToTicker,
+		ToNet:       sess.ToNet,
+		AmountIn:    "any",
+		AmountOut:   "market rate",
+		Deadline:    quoteResp.Quote.Deadline,
+		CorrID:      quoteResp.CorrelationID,
+		RefundAddr:  sess.RefundAddr,
+		RecvAddr:    sess.RecvAddr,
+		SwapType:    "ANY_INPUT",
+	}
+
+	orderToken, err := encryptOrderData(order)
+	if err != nil {
+		log.Printf("tg encrypt any_input order error: %v", err)
+		return
+	}
+	sess.OrderToken = orderToken
+	sess.State = stateOrderActive
+
+	// Build ANY_INPUT deposit card
+	depositCard := "<pre>" + renderAnyInputDepositCardMono(AnyInputCardData{
+		FromTicker: sess.FromTicker,
+		ToTicker:   sess.ToTicker,
+		Network:    networkDisplayName(sess.FromNet),
+		RefundAddr: sess.RefundAddr,
+		RecvAddr:   sess.RecvAddr,
+	}) + "</pre>"
+
+	depositCard += "\n\n<code>" + quoteResp.Quote.DepositAddress + "</code>"
+	if quoteResp.Quote.DepositMemo != "" {
+		depositCard += "\n\nMemo: <code>" + quoteResp.Quote.DepositMemo + "</code>"
+	}
+
+	orderURL := tgAppURL + "/order/" + orderToken
+	markup := &TGInlineKeyboardMarkup{
+		InlineKeyboard: [][]TGInlineKeyboardButton{
+			{
+				{Text: "🔄 Refresh Status", CallbackData: "rs"},
+				{Text: "📱 Open Order", WebApp: &TGWebApp{URL: orderURL}},
+			},
+		},
+	}
+
+	if err := tgEditMessage(chatID, sess.CardMsgID, depositCard, markup); err != nil {
+		log.Printf("tg edit any_input deposit card error: %v", err)
+	}
+}
+
 // handleTGConfirmSwap places a real quote and shows the unified deposit/order card.
 func handleTGConfirmSwap(chatID int64, sess *tgSession) {
 	if sess.State != stateQuoteConfirm {
@@ -134,7 +235,15 @@ func handleTGConfirmSwap(chatID int64, sess *tgSession) {
 		return
 	}
 
-	atomic, err := humanToAtomic(sess.Amount, fromToken.Decimals)
+	swapType := sess.swapType()
+
+	var atomic string
+	var err error
+	if swapType == "EXACT_OUTPUT" {
+		atomic, err = humanToAtomic(sess.AmountOut, toToken.Decimals)
+	} else {
+		atomic, err = humanToAtomic(sess.Amount, fromToken.Decimals)
+	}
 	if err != nil {
 		return
 	}
@@ -146,7 +255,7 @@ func handleTGConfirmSwap(chatID int64, sess *tgSession) {
 
 	req := &QuoteRequest{
 		Dry:                false,
-		SwapType:           "EXACT_INPUT",
+		SwapType:           swapType,
 		SlippageTolerance:  bps,
 		OriginAsset:        fromToken.DefuseAssetID,
 		DepositType:        "ORIGIN_CHAIN",
@@ -176,10 +285,11 @@ func handleTGConfirmSwap(chatID int64, sess *tgSession) {
 		ToNet:       sess.ToNet,
 		AmountIn:    quoteResp.Quote.AmountInFmt,
 		AmountOut:   quoteResp.Quote.AmountOutFmt,
-		Deadline:    quoteResp.Quote.Deadline, // use API's canonical deadline
+		Deadline:    quoteResp.Quote.Deadline,
 		CorrID:      quoteResp.CorrelationID,
 		RefundAddr:  sess.RefundAddr,
 		RecvAddr:    sess.RecvAddr,
+		SwapType:    swapType,
 	}
 
 	orderToken, err := encryptOrderData(order)
@@ -247,19 +357,29 @@ func buildOrderCard(order *OrderData, status *StatusResponse, orderToken string)
 	var cardText string
 	statusUpper := strings.ToUpper(status.Status)
 	if statusUpper == "PENDING_DEPOSIT" || statusUpper == "KNOWN_DEPOSIT_TX" {
-		netName := networkDisplayName(order.FromNet)
-		timeLeft := deadlineString(order.Deadline)
-		cardText = "<pre>" + renderDepositCardMono(DepositCardData{
-			FromTicker: order.FromTicker,
-			ToTicker:   order.ToTicker,
-			AmountIn:   order.AmountIn,
-			AmountOut:  order.AmountOut,
-			Network:    netName,
-			Deadline:   timeLeft,
-			RefundAddr: order.RefundAddr,
-			RecvAddr:   order.RecvAddr,
-		}) + "</pre>"
-		cardText += "\n\n<code>" + order.AmountIn + " " + order.FromTicker + "</code>"
+		if order.SwapType == "ANY_INPUT" {
+			cardText = "<pre>" + renderAnyInputDepositCardMono(AnyInputCardData{
+				FromTicker: order.FromTicker,
+				ToTicker:   order.ToTicker,
+				Network:    networkDisplayName(order.FromNet),
+				RefundAddr: order.RefundAddr,
+				RecvAddr:   order.RecvAddr,
+			}) + "</pre>"
+		} else {
+			netName := networkDisplayName(order.FromNet)
+			timeLeft := deadlineString(order.Deadline)
+			cardText = "<pre>" + renderDepositCardMono(DepositCardData{
+				FromTicker: order.FromTicker,
+				ToTicker:   order.ToTicker,
+				AmountIn:   order.AmountIn,
+				AmountOut:  order.AmountOut,
+				Network:    netName,
+				Deadline:   timeLeft,
+				RefundAddr: order.RefundAddr,
+				RecvAddr:   order.RecvAddr,
+			}) + "</pre>"
+			cardText += "\n\n<code>" + order.AmountIn + " " + order.FromTicker + "</code>"
+		}
 		cardText += "\n\n<code>" + order.DepositAddr + "</code>"
 		if order.Memo != "" {
 			cardText += "\n\nMemo: <code>" + order.Memo + "</code>"

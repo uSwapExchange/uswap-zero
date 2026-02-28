@@ -46,6 +46,9 @@ func buildAppURL(sess *tgSession) string {
 	if sess.Amount != "" {
 		params.Set("amt", sess.Amount)
 	}
+	if sess.AmountOut != "" {
+		params.Set("amt_out", sess.AmountOut)
+	}
 	if sess.RecvAddr != "" {
 		params.Set("recipient", sess.RecvAddr)
 	}
@@ -113,15 +116,22 @@ func renderSwapCard(sess *tgSession) (string, *TGInlineKeyboardMarkup) {
 	}
 	rows = append(rows, slipRow)
 
-	// Row 3: Set Amount
-	amountBtn := TGInlineKeyboardButton{CallbackData: "sa"}
+	// Row 3: Set Send Amount + Set Receive Amount
+	sendAmtBtn := TGInlineKeyboardButton{CallbackData: "sa"}
 	if sess.Amount != "" {
-		amountBtn.Text = "✓ Amount: " + sess.Amount + " " + fromLabel
-		amountBtn.Style = "primary"
+		sendAmtBtn.Text = "✓ Send: " + sess.Amount + " " + fromLabel
+		sendAmtBtn.Style = "primary"
 	} else {
-		amountBtn.Text = "Set Amount"
+		sendAmtBtn.Text = "Set Send Amt"
 	}
-	rows = append(rows, []TGInlineKeyboardButton{amountBtn})
+	recvAmtBtn := TGInlineKeyboardButton{CallbackData: "sao"}
+	if sess.AmountOut != "" {
+		recvAmtBtn.Text = "✓ Recv: " + sess.AmountOut + " " + toLabel
+		recvAmtBtn.Style = "primary"
+	} else {
+		recvAmtBtn.Text = "Set Recv Amt"
+	}
+	rows = append(rows, []TGInlineKeyboardButton{sendAmtBtn, recvAmtBtn})
 
 	// Row 4: Set Refund Address
 	refundBtn := TGInlineKeyboardButton{CallbackData: "sr"}
@@ -143,10 +153,14 @@ func renderSwapCard(sess *tgSession) (string, *TGInlineKeyboardMarkup) {
 	}
 	rows = append(rows, []TGInlineKeyboardButton{recvBtn})
 
-	// Row 6: Get Quote (only when all fields filled)
+	// Row 6: Get Quote / Quick Swap (only when all fields filled)
 	if sess.isComplete() {
+		quoteLabel := "✅ Get Quote →"
+		if sess.Amount == "" && sess.AmountOut == "" {
+			quoteLabel = "⚡ Quick Swap →"
+		}
 		rows = append(rows, []TGInlineKeyboardButton{
-			{Text: "✅ Get Quote →", CallbackData: "gq", Style: "success"},
+			{Text: quoteLabel, CallbackData: "gq", Style: "success"},
 		})
 	}
 
@@ -404,7 +418,8 @@ func handleTGSwapDirection(chatID int64, sess *tgSession) {
 	sess.FromTicker, sess.ToTicker = sess.ToTicker, sess.FromTicker
 	sess.FromNet, sess.ToNet = sess.ToNet, sess.FromNet
 	sess.RefundAddr, sess.RecvAddr = sess.RecvAddr, sess.RefundAddr
-	sess.Amount = "" // clear amount on swap
+	sess.Amount = ""    // clear amounts on swap
+	sess.AmountOut = ""
 	sess.State = stateSwapCard
 	updateSwapCard(chatID, sess)
 }
@@ -439,6 +454,41 @@ func handleTGAmountInput(chatID int64, sess *tgSession, msg *TGMessage) {
 	}
 
 	sess.Amount = amount
+	sess.AmountOut = "" // mutual exclusivity
+	sess.State = stateSwapCard
+
+	cleanupPromptReply(chatID, sess, msg.MessageID)
+	updateSwapCard(chatID, sess)
+}
+
+func handleTGPromptAmountOut(chatID int64, sess *tgSession) {
+	sess.State = stateEnterAmountOut
+	prompt := fmt.Sprintf("Enter amount of %s to receive:", sess.ToTicker)
+	msg, err := tgSendMessage(chatID, prompt, &TGForceReply{
+		ForceReply:            true,
+		Selective:             true,
+		InputFieldPlaceholder: "e.g. 1.0",
+	})
+	if err == nil {
+		sess.PromptMsgID = msg.MessageID
+	}
+}
+
+func handleTGAmountOutInput(chatID int64, sess *tgSession, msg *TGMessage) {
+	amount := strings.TrimSpace(msg.Text)
+
+	if _, err := humanToAtomic(amount, 8); err != nil {
+		errMsg, _ := tgSendMessage(chatID, "Invalid amount. Please enter a number (e.g. 1.0).", nil)
+		if errMsg != nil {
+			go func() {
+				tgDeleteMessage(chatID, errMsg.MessageID)
+			}()
+		}
+		return
+	}
+
+	sess.AmountOut = amount
+	sess.Amount = "" // mutual exclusivity
 	sess.State = stateSwapCard
 
 	cleanupPromptReply(chatID, sess, msg.MessageID)

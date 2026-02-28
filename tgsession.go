@@ -15,8 +15,9 @@ const (
 	stateEnterRefund  = 5
 	stateEnterRecv    = 6
 	statePickSlippage = 7
-	stateQuoteConfirm = 8
-	stateOrderActive  = 9
+	stateQuoteConfirm  = 8
+	stateOrderActive   = 9
+	stateEnterAmountOut = 10
 )
 
 // tgSession holds the swap state for a single Telegram chat.
@@ -33,6 +34,7 @@ type tgSession struct {
 	ToTicker   string
 	ToNet      string
 	Amount     string
+	AmountOut  string // receive amount (for EXACT_OUTPUT)
 	RefundAddr string
 	RecvAddr   string
 	Slippage   string // percentage string: "0.5", "1", "2", "3"
@@ -90,6 +92,7 @@ func (sess *tgSession) reset() {
 	sess.ToTicker = "ETH"
 	sess.ToNet = "eth"
 	sess.Amount = ""
+	sess.AmountOut = ""
 	sess.RefundAddr = ""
 	sess.RecvAddr = ""
 	sess.Slippage = "1"
@@ -110,10 +113,23 @@ func (sess *tgSession) trackMsg(msgID int) {
 	}
 }
 
-// isComplete returns true when all swap fields are filled.
+// isComplete returns true when all required swap fields are filled.
+// Amount is optional — if neither Amount nor AmountOut is set, ANY_INPUT mode is used.
 func (sess *tgSession) isComplete() bool {
 	return sess.FromTicker != "" && sess.ToTicker != "" &&
-		sess.Amount != "" && sess.RefundAddr != "" && sess.RecvAddr != ""
+		sess.RefundAddr != "" && sess.RecvAddr != ""
+}
+
+// swapType returns the swap type based on which amount fields are set.
+// When both are set, Amount (send) takes priority → FLEX_INPUT.
+func (sess *tgSession) swapType() string {
+	if sess.Amount != "" {
+		return "FLEX_INPUT"
+	}
+	if sess.AmountOut != "" {
+		return "EXACT_OUTPUT"
+	}
+	return "ANY_INPUT"
 }
 
 // startCleanup starts a goroutine that removes stale sessions.

@@ -17,13 +17,13 @@
       <div class="swap-card swap-card--from">
         <div class="swap-card__label">You Send</div>
         <div class="swap-card__row">
-          <a href="/?modal=from&amp;from={{.From}}&amp;from_net={{.FromNet}}&amp;to={{.To}}&amp;to_net={{.ToNet}}&amp;amt={{.Amount}}&amp;slippage={{.Slippage}}&amp;recipient={{.Recipient}}" class="currency-pill">
+          <a href="/?modal=from&amp;from={{.From}}&amp;from_net={{.FromNet}}&amp;to={{.To}}&amp;to_net={{.ToNet}}&amp;amt={{.Amount}}&amp;amt_out={{.AmountOut}}&amp;slippage={{.Slippage}}&amp;recipient={{.Recipient}}" class="currency-pill">
             <img src="{{iconPath .From}}" alt="" class="currency-pill__icon">
             <span class="currency-pill__ticker">{{.From}}</span>
             <span class="currency-pill__arrow">&#9660;</span>
           </a>
           <div class="swap-card__amount">
-            <input type="text" name="amount" value="{{.Amount}}" placeholder="0.00" class="amount-input" inputmode="decimal" autocomplete="off" required>
+            <input type="text" name="amount" value="{{.Amount}}" placeholder="0.00" class="amount-input" inputmode="decimal" autocomplete="off" id="amount-in">
           </div>
         </div>
       </div>
@@ -37,11 +37,14 @@
       <div class="swap-card swap-card--to">
         <div class="swap-card__label">You Receive</div>
         <div class="swap-card__row">
-          <a href="/?modal=to&amp;from={{.From}}&amp;from_net={{.FromNet}}&amp;to={{.To}}&amp;to_net={{.ToNet}}&amp;amt={{.Amount}}&amp;slippage={{.Slippage}}&amp;recipient={{.Recipient}}" class="currency-pill">
+          <a href="/?modal=to&amp;from={{.From}}&amp;from_net={{.FromNet}}&amp;to={{.To}}&amp;to_net={{.ToNet}}&amp;amt={{.Amount}}&amp;amt_out={{.AmountOut}}&amp;slippage={{.Slippage}}&amp;recipient={{.Recipient}}" class="currency-pill">
             <img src="{{iconPath .To}}" alt="" class="currency-pill__icon">
             <span class="currency-pill__ticker">{{.To}}</span>
             <span class="currency-pill__arrow">&#9660;</span>
           </a>
+          <div class="swap-card__amount">
+            <input type="text" name="amount_out" value="{{.AmountOut}}" placeholder="0.00" class="amount-input" inputmode="decimal" autocomplete="off" id="amount-out">
+          </div>
         </div>
       </div>
     </div>
@@ -75,8 +78,19 @@
       </div>
     </div>
 
-    <button type="submit" class="btn btn--primary btn--block">Get Quote &rarr;</button>
+    <button type="submit" class="btn btn--primary btn--block" id="submit-btn">Get Quote &rarr;</button>
   </form>
+
+  <script>
+  (function(){
+    var ai=document.getElementById('amount-in'),ao=document.getElementById('amount-out'),btn=document.getElementById('submit-btn');
+    if(!ai||!ao||!btn)return;
+    ai.addEventListener('input',function(){if(ai.value)ao.value='';upd();});
+    ao.addEventListener('input',function(){if(ao.value)ai.value='';upd();});
+    function upd(){btn.textContent=(!ai.value&&!ao.value)?'Quick Swap \u2192':'Get Quote \u2192';}
+    upd();
+  })();
+  </script>
 
 </div>
 
@@ -86,7 +100,7 @@
   <div class="modal-panel">
     <div class="modal-header">
       <span class="modal-title">Select {{if eq .ModalOpen "from"}}Source{{else}}Destination{{end}} Currency</span>
-      <a href="/?from={{.From}}&amp;from_net={{.FromNet}}&amp;to={{.To}}&amp;to_net={{.ToNet}}&amp;amt={{.Amount}}&amp;slippage={{.Slippage}}&amp;recipient={{.Recipient}}" class="modal-close">&times;</a>
+      <a href="/?from={{.From}}&amp;from_net={{.FromNet}}&amp;to={{.To}}&amp;to_net={{.ToNet}}&amp;amt={{.Amount}}&amp;amt_out={{.AmountOut}}&amp;slippage={{.Slippage}}&amp;recipient={{.Recipient}}" class="modal-close">&times;</a>
     </div>
     <div class="modal-search">
       <form method="get" action="/" class="modal-search-form">
@@ -96,6 +110,7 @@
         <input type="hidden" name="to" value="{{.To}}">
         <input type="hidden" name="to_net" value="{{.ToNet}}">
         <input type="hidden" name="amt" value="{{.Amount}}">
+        <input type="hidden" name="amt_out" value="{{.AmountOut}}">
         <input type="hidden" name="slippage" value="{{.Slippage}}">
         <input type="hidden" name="recipient" value="{{.Recipient}}">
         <input type="text" name="{{if eq .ModalOpen "from"}}search_from{{else}}search_to{{end}}" value="{{if eq .ModalOpen "from"}}{{.SearchFrom}}{{else}}{{.SearchTo}}{{end}}" placeholder="Search tokens..." class="modal-search-input" autofocus>
@@ -108,7 +123,7 @@
         <summary>{{.Name}} <span class="network-count">({{len .Tokens}})</span></summary>
         <div class="token-grid">
           {{range .Tokens}}
-          <a href="/?{{if eq $.ModalOpen "from"}}from={{.Ticker | upper}}&amp;from_net={{.ChainName | lower}}&amp;to={{$.To}}&amp;to_net={{$.ToNet}}{{else}}from={{$.From}}&amp;from_net={{$.FromNet}}&amp;to={{.Ticker | upper}}&amp;to_net={{.ChainName | lower}}{{end}}&amp;amt={{$.Amount}}&amp;slippage={{$.Slippage}}&amp;recipient={{$.Recipient}}" class="token-card">
+          <a href="/?{{if eq $.ModalOpen "from"}}from={{.Ticker | upper}}&amp;from_net={{.ChainName | lower}}&amp;to={{$.To}}&amp;to_net={{$.ToNet}}{{else}}from={{$.From}}&amp;from_net={{$.FromNet}}&amp;to={{.Ticker | upper}}&amp;to_net={{.ChainName | lower}}{{end}}&amp;amt={{$.Amount}}&amp;amt_out={{$.AmountOut}}&amp;slippage={{$.Slippage}}&amp;recipient={{$.Recipient}}" class="token-card">
             <img src="{{iconPath .Ticker}}" alt="" class="token-card__icon">
             <span class="token-card__ticker">{{.Ticker | upper}}</span>
             {{if gt .Price 0.0}}<span class="token-card__price">{{formatUSD .Price}}</span>{{end}}
