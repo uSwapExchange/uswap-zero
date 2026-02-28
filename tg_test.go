@@ -147,9 +147,9 @@ func TestRenderSwapCard(t *testing.T) {
 	if !strings.Contains(text, "Ø") {
 		t.Error("swap card should contain Ø branding")
 	}
-	// Verify it's wrapped in <pre>
-	if !strings.HasPrefix(text, "<pre>") {
-		t.Error("swap card should be wrapped in <pre>")
+	// Verify it contains <pre> block
+	if !strings.Contains(text, "<pre>") {
+		t.Error("swap card should contain <pre> block")
 	}
 
 	if markup == nil {

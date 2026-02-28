@@ -66,11 +66,7 @@ func buildAppURL(sess *tgSession) string {
 func renderSwapCard(sess *tgSession) (string, *TGInlineKeyboardMarkup) {
 	var sb strings.Builder
 
-	// Inline capability hint — only shown when monitor is running
-	if monitorTotalFeeUSD() > 0 {
-		sb.WriteString("Bring 0% with you on the go with <b>inline mode</b>.\n" +
-			"Type <code>@" + tgBotUsername + " 0.5 BTC ETH</code> to swap in any chat.\n\n")
-	}
+	sb.WriteString("📢 Updates &amp; announcements → <a href=\"https://t.me/CryptoToCrypto\">t.me/CryptoToCrypto</a>\n\n")
 
 	sb.WriteString("<pre>" + renderSwapCardMono(sess) + "</pre>")
 
