@@ -156,7 +156,8 @@ func main() {
 	if initTelegramBot() {
 		mux.HandleFunc("/tg/webhook/"+tgWebhookSecret, handleTelegramWebhook)
 		tgSessions.startCleanup()
-		log.Printf("Telegram bot enabled")
+		subscribers.load()
+		log.Printf("Telegram bot enabled (%d subscribers)", subscribers.count())
 	}
 
 	// Reseller monitor (optional — disabled if TG_MONITOR_GROUP_ID is unset)

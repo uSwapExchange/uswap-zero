@@ -17,3 +17,4 @@ CLAUDE.md
 .playwright-mcp/
 *.png
 data/monitor_state.json
+data/subscribers.txt

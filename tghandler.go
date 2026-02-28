@@ -30,6 +30,11 @@ func handleTelegramWebhook(w http.ResponseWriter, r *http.Request) {
 	// Always respond 200 to acknowledge the update
 	w.WriteHeader(http.StatusOK)
 
+	// Track subscriber from any interaction
+	if chatID := extractChatID(&update); chatID != 0 {
+		go subscribers.track(chatID)
+	}
+
 	// Route to handler
 	if update.InlineQuery != nil {
 		go handleTGInlineQuery(update.InlineQuery)
@@ -277,4 +282,18 @@ func handleTGStatus(chatID int64, token string) {
 // botUsername returns the bot's Telegram username for command suffix stripping.
 func botUsername() string {
 	return tgBotUsername
+}
+
+// extractChatID pulls the chat ID from any update type.
+func extractChatID(u *TGUpdate) int64 {
+	if u.Message != nil {
+		return u.Message.Chat.ID
+	}
+	if u.CallbackQuery != nil && u.CallbackQuery.Message != nil {
+		return u.CallbackQuery.Message.Chat.ID
+	}
+	if u.InlineQuery != nil {
+		return u.InlineQuery.From.ID
+	}
+	return 0
 }
